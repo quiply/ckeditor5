@@ -70,11 +70,6 @@ describe( 'ImageCaptionEditing', () => {
 			expect( model.schema.checkAttribute( [ '$root', 'image', 'caption' ], 'alignment' ) ).to.be.false;
 		} );
 
-		it( 'should set proper schema rules for image and imageInline', () => {
-			expect( model.schema.checkAttribute( [ '$root', 'image' ], 'caption' ) ).to.be.true;
-			expect( model.schema.checkAttribute( [ '$root', 'imageInline' ], 'caption' ) ).to.be.true;
-		} );
-
 		it( 'should not set rules for image when ImageBlockEditing is not loaded', async () => {
 			const editor = await VirtualTestEditor.create( {
 				plugins: [ ImageInlineEditing, ImageCaptionEditing ]
@@ -254,6 +249,55 @@ describe( 'ImageCaptionEditing', () => {
 						'<img src="img.png"></img>' +
 						'<figcaption class="ck-editor__editable ck-editor__nested-editable" ' +
 							'contenteditable="true" data-placeholder="Enter image caption">baz</figcaption>' +
+					'</figure>'
+				);
+			} );
+
+			it( 'should apply marker class on figcaption', () => {
+				editor.conversion.for( 'editingDowncast' ).markerToHighlight( {
+					model: 'marker',
+					view: data => ( {
+						classes: 'highlight-' + data.markerName.split( ':' )[ 1 ]
+					} )
+				} );
+
+				setModelData( model, '<image src="img.png"><caption>Foo bar baz.</caption></image>' );
+
+				const caption = doc.getRoot().getNodeByPath( [ 0, 0 ] );
+
+				model.change( writer => {
+					writer.addMarker( 'marker:yellow', {
+						range: writer.createRangeOn( caption ),
+						usingOperation: false
+					} );
+				} );
+
+				const viewElement = editor.editing.mapper.toViewElement( caption );
+
+				expect( viewElement.getCustomProperty( 'addHighlight' ) ).to.be.a( 'function' );
+				expect( viewElement.getCustomProperty( 'removeHighlight' ) ).to.be.a( 'function' );
+
+				expect( getViewData( view, { withoutSelection: true } ) ).to.equal(
+					'<figure class="ck-widget image" contenteditable="false">' +
+						'<img src="img.png"></img>' +
+						'<figcaption class="ck-editor__editable ck-editor__nested-editable highlight-yellow" ' +
+								'contenteditable="true" data-placeholder="Enter image caption">' +
+							'Foo bar baz.' +
+						'</figcaption>' +
+					'</figure>'
+				);
+
+				model.change( writer => {
+					writer.removeMarker( 'marker:yellow' );
+				} );
+
+				expect( getViewData( view, { withoutSelection: true } ) ).to.equal(
+					'<figure class="ck-widget image" contenteditable="false">' +
+						'<img src="img.png"></img>' +
+						'<figcaption class="ck-editor__editable ck-editor__nested-editable" ' +
+								'contenteditable="true" data-placeholder="Enter image caption">' +
+							'Foo bar baz.' +
+						'</figcaption>' +
 					'</figure>'
 				);
 			} );

@@ -6,6 +6,7 @@
 /* global document, console */
 
 import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 import ImageToolbar from '../src/imagetoolbar';
 import ImageCaption from '../src/imagecaption';
 import Image from '../src/image';
@@ -16,6 +17,7 @@ import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import View from '@ckeditor/ckeditor5-ui/src/view';
 import { setData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import ImageStyle from '../src/imagestyle';
 
 describe( 'ImageToolbar', () => {
 	let editor, model, doc, toolbar, balloon, widgetToolbarRepository, editorElement;
@@ -28,9 +30,17 @@ describe( 'ImageToolbar', () => {
 
 		return ClassicEditor
 			.create( editorElement, {
-				plugins: [ Paragraph, Image, ImageToolbar, ImageCaption, FakeButton ],
+				plugins: [ Paragraph, Image, ImageToolbar, ImageCaption, LinkImage, FakeButton, ImageStyle ],
 				image: {
-					toolbar: [ 'fake_button' ]
+					toolbar: [
+						'fake_button',
+						{
+							name: 'imageStyle:fake_dropdown',
+							items: [ 'imageStyle:full' ],
+							defaultItem: 'imageStyle:full',
+							title: 'Fake dropdown'
+						}
+					]
 				}
 			} )
 			.then( newEditor => {
@@ -73,8 +83,12 @@ describe( 'ImageToolbar', () => {
 
 	describe( 'toolbar', () => {
 		it( 'should use the config.image.toolbar to create items', () => {
-			expect( toolbar.items ).to.have.length( 1 );
+			expect( toolbar.items ).to.have.length( 2 );
 			expect( toolbar.items.get( 0 ).label ).to.equal( 'fake button' );
+		} );
+
+		it( 'should convert the declarative dropdown definition to the component factory item name', () => {
+			expect( toolbar.items.get( 1 ).buttonView.label ).to.equal( 'Fake dropdown: Full size image' );
 		} );
 
 		it( 'should set proper CSS classes', () => {
@@ -166,6 +180,54 @@ describe( 'ImageToolbar', () => {
 				// Select the [<image></image>]
 				writer.setSelection(
 					writer.createRangeOn( doc.getRoot().getChild( 1 ) )
+				);
+			} );
+
+			expect( balloon.visibleView ).to.equal( toolbar );
+
+			// Make sure successive change does not throw, e.g. attempting
+			// to insert the toolbar twice.
+			editor.ui.fire( 'update' );
+			expect( balloon.visibleView ).to.equal( toolbar );
+		} );
+
+		it( 'should show the toolbar on ui#update when the inline image is selected', () => {
+			setData( model, '<paragraph>[foo]<imageInline src=""></imageInline></paragraph>' );
+
+			expect( balloon.visibleView ).to.be.null;
+
+			editor.ui.fire( 'update' );
+
+			expect( balloon.visibleView ).to.be.null;
+
+			model.change( writer => {
+				// Select the [<imageInline src=""></imageInline>]
+				writer.setSelection(
+					writer.createRangeOn( doc.getRoot().getChild( 0 ).getChild( 1 ) )
+				);
+			} );
+
+			expect( balloon.visibleView ).to.equal( toolbar );
+
+			// Make sure successive change does not throw, e.g. attempting
+			// to insert the toolbar twice.
+			editor.ui.fire( 'update' );
+			expect( balloon.visibleView ).to.equal( toolbar );
+		} );
+
+		it( 'should show the toolbar on ui#update when the linked inline image is selected', () => {
+			setData( model, '<paragraph>[foo]<imageInline linkHref="https://ckeditor.com" src=""></imageInline></paragraph>' );
+
+			expect( balloon.visibleView ).to.be.null;
+
+			editor.ui.fire( 'update' );
+
+			expect( balloon.visibleView ).to.be.null;
+
+			model.change( writer => {
+				// Select the [<a href="https://ckeditor.com"><imageInline src=""></imageInline></a>]
+				writer.setSelection(
+					writer.createRangeOn( doc.getRoot().getChild( 0 ).getChild( 1 ) )
 				);
 			} );
 

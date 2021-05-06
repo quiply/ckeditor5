@@ -9,31 +9,30 @@ import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 import utils from '../../src/imagestyle/utils';
 
 describe( 'ImageStyle utils', () => {
-	const { getDefaultStylesConfiguration, DEFAULT_ARRANGEMENTS, DEFAULT_GROUPS, DEFAULT_ICONS } = utils;
-	const allArrangements = Object.values( DEFAULT_ARRANGEMENTS );
-	const allGroups = Object.values( DEFAULT_GROUPS );
+	const { getDefaultStylesConfiguration, DEFAULT_OPTIONS, DEFAULT_ICONS } = utils;
+	const allStyles = Object.values( DEFAULT_OPTIONS );
 
 	describe( 'default styles', () => {
-		describe( 'arrangements', () => {
-			it( 'should have the #DEFAULT_ARRANGEMENTS properly defined', () => {
-				expect( DEFAULT_ARRANGEMENTS ).to.be.an( 'object' ).that.has.all.keys( [
+		describe( 'styles', () => {
+			it( 'should have the #DEFAULT_OPTIONS properly defined', () => {
+				expect( DEFAULT_OPTIONS ).to.be.an( 'object' ).that.has.all.keys( [
 					'inline', 'alignLeft', 'alignRight', 'alignBlockLeft', 'alignCenter', 'alignBlockRight', 'full', 'side'
 				] );
 			} );
 
 			it( 'should have always properly defined keys', () => {
-				allArrangements.forEach( arrangement => {
-					expect( arrangement ).to.be.an( 'object' ).that.includes.keys( [ 'name', 'title', 'icon', 'modelElements' ] );
-					expect( arrangement ).to.have.any.keys( [ 'className', 'isDefault' ] );
+				allStyles.forEach( style => {
+					expect( style ).to.be.an( 'object' ).that.includes.keys( [ 'name', 'title', 'icon', 'modelElements' ] );
+					expect( style ).to.have.any.keys( [ 'className', 'isDefault' ] );
 				} );
 			} );
 
-			it( 'should have a single default arrangement defined for the inline and block images', () => {
-				const blockDefault = allArrangements.filter( arrangement =>
-					arrangement.isDefault && arrangement.modelElements.includes( 'image' ) );
+			it( 'should have a single default style defined for the inline and block images', () => {
+				const blockDefault = allStyles.filter( style =>
+					style.isDefault && style.modelElements.includes( 'image' ) );
 
-				const inlineDefault = allArrangements.filter( arrangement =>
-					arrangement.isDefault && arrangement.modelElements.includes( 'imageInline' ) );
+				const inlineDefault = allStyles.filter( style =>
+					style.isDefault && style.modelElements.includes( 'imageInline' ) );
 
 				expect( blockDefault ).to.have.lengthOf( 1 );
 				expect( blockDefault[ 0 ] ).to.not.have.key( 'className' );
@@ -43,8 +42,8 @@ describe( 'ImageStyle utils', () => {
 			} );
 
 			it( 'should always have #modelElements properly defined', () => {
-				allArrangements.forEach( arrangement => {
-					const modelElements = arrangement.modelElements;
+				allStyles.forEach( style => {
+					const modelElements = style.modelElements;
 
 					expect( modelElements ).to.be.an( 'array' );
 					expect( modelElements ).to.contain.oneOf( [ 'image', 'imageInline' ] );
@@ -56,43 +55,11 @@ describe( 'ImageStyle utils', () => {
 			} );
 
 			it( 'should always have properly defined #name and #icon', () => {
-				for ( const arrangement in DEFAULT_ARRANGEMENTS ) {
-					expect( arrangement ).to.equal( DEFAULT_ARRANGEMENTS[ arrangement ].name );
-					expect( DEFAULT_ARRANGEMENTS[ arrangement ].icon ).to.be.a( 'string' );
+				for ( const style in DEFAULT_OPTIONS ) {
+					expect( style ).to.equal( DEFAULT_OPTIONS[ style ].name );
+					expect( DEFAULT_OPTIONS[ style ].icon ).to.be.a( 'string' );
 				}
 			} );
-		} );
-
-		describe( 'groups', () => {
-			it( 'should have the #DEFAULT_GROUPS properly defined', () => {
-				expect( DEFAULT_GROUPS ).to.be.an( 'object' ).that.has.all.keys( [ 'wrapText', 'breakText' ] );
-			} );
-
-			it( 'should have always properly defined keys', () => {
-				allGroups.forEach( group => {
-					expect( group ).to.be.an( 'object' ).that.has.all.keys( 'name', 'title', 'defaultItem', 'items' );
-				} );
-			} );
-
-			it( 'should have properly defined #items and #defaultItem', () => {
-				allGroups.forEach( group => {
-					expect( group.items ).to.include( group.defaultItem );
-
-					expect( DEFAULT_ARRANGEMENTS ).to.include.keys( group.items );
-				} );
-			} );
-
-			it( 'should have properly defined #name', () => {
-				for ( const group in DEFAULT_GROUPS ) {
-					expect( group ).to.equal( DEFAULT_GROUPS[ group ].name );
-				}
-			} );
-		} );
-
-		it( 'should have the #DEFAULT_ICONS properly defined', () => {
-			expect( DEFAULT_ICONS ).to.be.an( 'object' ).that.has.all.keys( [
-				'full', 'left', 'right', 'center', 'inlineLeft', 'inlineRight', 'inline'
-			] );
 		} );
 	} );
 
@@ -101,12 +68,11 @@ describe( 'ImageStyle utils', () => {
 			const config = getDefaultStylesConfiguration( true, true );
 
 			expect( config ).to.deep.equal( {
-				arrangements: [
+				options: [
 					'inline', 'alignLeft', 'alignRight',
 					'alignCenter', 'alignBlockLeft', 'alignBlockRight',
 					'full', 'side'
-				],
-				groups: [ 'wrapText', 'breakText' ]
+				]
 			} );
 		} );
 
@@ -114,7 +80,7 @@ describe( 'ImageStyle utils', () => {
 			const config = getDefaultStylesConfiguration( false, true );
 
 			expect( config ).to.deep.equal( {
-				arrangements: [ 'inline', 'alignLeft', 'alignRight' ]
+				options: [ 'inline', 'alignLeft', 'alignRight' ]
 			} );
 		} );
 
@@ -122,7 +88,7 @@ describe( 'ImageStyle utils', () => {
 			const config = getDefaultStylesConfiguration( true, false );
 
 			expect( config ).to.deep.equal( {
-				arrangements: [ 'full', 'side' ]
+				options: [ 'full', 'side' ]
 			} );
 		} );
 
@@ -135,13 +101,12 @@ describe( 'ImageStyle utils', () => {
 
 	describe( 'normalizeImageStyles()', () => {
 		function normalizeStyles(
-			arrangements = allArrangements,
-			groups = [],
+			options = allStyles,
 			isBlockPluginLoaded = true,
 			isInlinePluginLoaded = true
 		) {
 			return utils.normalizeStyles( {
-				configuredStyles: { arrangements, groups },
+				configuredStyles: { options },
 				isBlockPluginLoaded,
 				isInlinePluginLoaded
 			} );
@@ -153,129 +118,100 @@ describe( 'ImageStyle utils', () => {
 			testUtils.sinon.stub( console, 'warn' );
 		} );
 
-		describe( 'arrangement', () => {
+		describe( 'style', () => {
 			describe( 'set as a string in the editor config', () => {
-				it( 'should return the proper default arrangement if #name matches', () => {
-					for ( const arrangement in DEFAULT_ARRANGEMENTS ) {
-						const normalizedStyles = normalizeStyles( [ arrangement ] );
+				it( 'should return the proper default style if #name matches', () => {
+					for ( const style in DEFAULT_OPTIONS ) {
+						const normalizedStyles = normalizeStyles( [ style ] );
 
-						expect( normalizedStyles.arrangements[ 0 ] ).to.not.equal( DEFAULT_ARRANGEMENTS[ arrangement ] );
-						expect( normalizedStyles ).to.deep.equal(
-							{ arrangements: [ DEFAULT_ARRANGEMENTS[ arrangement ] ], groups: [] }
-						);
+						expect( normalizedStyles[ 0 ] ).to.not.equal( DEFAULT_OPTIONS[ style ] );
+						expect( normalizedStyles ).to.deep.equal( [ DEFAULT_OPTIONS[ style ] ] );
 					}
 
 					sinon.assert.notCalled( console.warn );
 				} );
 
-				it( 'should warn and omit the arrangement if the #name not found in default arrangements', () => {
-					expect( normalizeStyles(
-						[ 'foo' ]
-					) ).to.deep.equal(
-						{ arrangements: [], groups: [] }
-					);
+				it( 'should warn and omit the style if the #name not found in default styles', () => {
+					expect( normalizeStyles( [ 'foo' ] ) ).to.deep.equal( [] );
 
 					sinon.assert.calledOnce( console.warn );
 					sinon.assert.calledWithExactly( console.warn,
 						sinon.match( /^image-style-configuration-definition-invalid/ ),
-						{ arrangement: { name: 'foo' } },
+						{ style: { name: 'foo' } },
 						sinon.match.string // Link to the documentation
 					);
 				} );
 			} );
 
 			describe( 'set as an object in the editor config', () => {
-				it( 'should pass through if #name not found in the default arrangements', () => {
-					const arrangement = { name: 'foo', modelElements: [ 'image' ] };
+				it( 'should pass through if #name not found in the default styles', () => {
+					const style = { name: 'foo', modelElements: [ 'image' ] };
 
-					expect( normalizeStyles(
-						[ arrangement ]
-					) ).to.deep.equal(
-						{ arrangements: [ arrangement ], groups: [] }
-					);
+					expect( normalizeStyles( [ style ] ) ).to.deep.equal( [ style ] );
 
 					sinon.assert.notCalled( console.warn );
 				} );
 
 				it( 'should use one of default icons if #icon matches', () => {
 					for ( const icon in DEFAULT_ICONS ) {
-						const arrangement = { name: 'custom', modelElements: [ 'image' ], icon };
+						const style = { name: 'custom', modelElements: [ 'image' ], icon };
 
-						expect( normalizeStyles(
-							[ arrangement ]
-						) ).to.deep.equal(
-							{ arrangements: [ { ...arrangement, icon: DEFAULT_ICONS[ icon ] } ], groups: [] }
-						);
+						expect( normalizeStyles( [ style ] ) ).to.deep.equal( [ { ...style, icon: DEFAULT_ICONS[ icon ] } ] );
 					}
 
 					sinon.assert.notCalled( console.warn );
 				} );
 
 				it( 'should pass the icon if is not a string', () => {
-					const arrangement = { name: 'custom', modelElements: [ 'image' ], icon: {} };
+					const style = { name: 'custom', modelElements: [ 'image' ], icon: {} };
 
-					expect( normalizeStyles(
-						[ arrangement ]
-					) ).to.deep.equal(
-						{ arrangements: [ arrangement ], groups: [] }
-					);
+					expect( normalizeStyles( [ style ] ) ).to.deep.equal( [ style ] );
 
 					sinon.assert.notCalled( console.warn );
 				} );
 
-				it( 'should warn and filter out the arrangement which has no modelElements defined', () => {
-					const arrangement = { name: 'foo' };
+				it( 'should warn and filter out the style which has no modelElements defined', () => {
+					const style = { name: 'foo' };
 
-					expect( normalizeStyles(
-						[ arrangement ]
-					) ).to.deep.equal(
-						{ arrangements: [], groups: [] }
-					);
+					expect( normalizeStyles( [ style ] ) ).to.deep.equal( [] );
 
 					sinon.assert.calledOnce( console.warn );
 					sinon.assert.calledWithExactly( console.warn,
 						sinon.match( /^image-style-configuration-definition-invalid/ ),
-						{ arrangement },
+						{ style },
 						sinon.match.string // Link to the documentation
 					);
 				} );
 
-				it( 'should warn and filter out the arrangement which has modelElements defined as an empty array', () => {
-					const arrangement = { name: 'foo', modelElements: [] };
+				it( 'should warn and filter out the style which has modelElements defined as an empty array', () => {
+					const style = { name: 'foo', modelElements: [] };
 
-					expect( normalizeStyles(
-						[ arrangement ]
-					) ).to.deep.equal(
-						{ arrangements: [], groups: [] }
-					);
+					expect( normalizeStyles( [ style ] ) ).to.deep.equal( [] );
 
 					sinon.assert.calledOnce( console.warn );
 					sinon.assert.calledWithExactly( console.warn,
 						sinon.match( /^image-style-configuration-definition-invalid/ ),
-						{ arrangement },
+						{ style },
 						sinon.match.string // Link to the documentation
 					);
 				} );
 
-				it( 'should warn and filter out the arrangement which is not supported by any of the loaded editing plugins', () => {
-					const arrangement = { name: 'foo', modelElements: [ 'image' ] };
+				it( 'should warn and filter out the style which is not supported by any of the loaded editing plugins', () => {
+					const style = { name: 'foo', modelElements: [ 'image' ] };
 
-					expect( normalizeStyles(
-						[ arrangement ], [], false, true // ImageBlockEditing plugin is not loaded
-					) ).to.deep.equal(
-						{ arrangements: [], groups: [] }
-					);
+					// ImageBlockEditing plugin is not loaded
+					expect( normalizeStyles( [ style ], false, true ) ).to.deep.equal( [] );
 
 					sinon.assert.calledOnce( console.warn );
 					sinon.assert.calledWithExactly( console.warn,
 						sinon.match( /^image-style-missing-dependency/ ),
-						{ arrangement, missingPlugins: [ 'ImageBlockEditing' ] },
+						{ style, missingPlugins: [ 'ImageBlockEditing' ] },
 						sinon.match.string // Link to the documentation
 					);
 				} );
 
-				it( 'should extend one of default styles if #name found in the default arrangements', () => {
-					const arrangement = {
+				it( 'should extend one of default styles if #name found in the default styles', () => {
+					const style = {
 						name: 'alignLeft',
 						title: 'customTitle',
 						modelElements: [ 'image' ],
@@ -285,145 +221,33 @@ describe( 'ImageStyle utils', () => {
 						customProp: 'customProp'
 					};
 
-					const normalizedStyles = normalizeStyles( [ arrangement ] );
+					const normalizedStyles = normalizeStyles( [ style ] );
 
-					expect( normalizedStyles.arrangements[ 0 ] ).to.not.equal( DEFAULT_ARRANGEMENTS.alignLeft );
-					expect( normalizedStyles ).to.deep.equal(
-						{ arrangements: [ { ...arrangement, icon: DEFAULT_ICONS.inline } ], groups: [] }
-					);
+					expect( normalizedStyles[ 0 ] ).to.not.equal( DEFAULT_OPTIONS.alignLeft );
+					expect( normalizedStyles ).to.deep.equal( [ { ...style, icon: DEFAULT_ICONS.inline } ] );
 
 					sinon.assert.notCalled( console.warn );
 				} );
 			} );
 		} );
 
-		describe( 'group', () => {
-			describe( 'set as a string in the editor config', () => {
-				it( 'should return the proper default group if #name matches', () => {
-					for ( const group in DEFAULT_GROUPS ) {
-						const currentGroup = DEFAULT_GROUPS[ group ];
-						const normalizedStyles = normalizeStyles( allArrangements, [ group ] );
-
-						expect( normalizedStyles.groups[ 0 ] ).to.not.equal( currentGroup );
-						expect( normalizedStyles ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [ currentGroup ] } );
-					}
-
-					sinon.assert.notCalled( console.warn );
-				} );
-
-				it( 'should warn and omit the group if a #name not found in default groups', () => {
-					expect( normalizeStyles(
-						allArrangements, [ 'foo' ]
-					) ).to.deep.equal(
-						{ groups: [], arrangements: allArrangements }
-					);
-				} );
+		describe( 'getDefaultDropdownDefinitions', () => {
+			it( 'should return default drop-downs list if both image editing plugins are loaded', () => {
+				expect( utils.getDefaultDropdownDefinitions( { has: () => true } ) ).to.deep.equal( utils.DEFAULT_DROPDOWN_DEFINITIONS );
 			} );
 
-			describe( 'set as an object in the editor config', () => {
-				describe( '#name found in the default groups', () => {
-					it( 'should pass through and extend if definition is valid', () => {
-						const group = { name: 'wrapText', items: [ 'alignLeft' ], defaultItem: 'alignLeft', customProp: 'customProp' };
-						const normalizedStyles = normalizeStyles( allArrangements, [ group ] );
+			it( 'should return an empty array if only `ImageBlockEditing` plugin is loaded', () => {
+				expect( utils.getDefaultDropdownDefinitions( { has: pluginName => pluginName === 'ImageBlockEditing' } ) )
+					.to.deep.equal( [] );
+			} );
 
-						expect( normalizedStyles.groups[ 0 ] ).to.not.equal( DEFAULT_GROUPS.wrapText );
-						expect( normalizedStyles ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [ { ...DEFAULT_GROUPS.wrapText, ...group } ] }
-						);
+			it( 'should return an empty array if only `ImageInlineEditing` plugin is loaded', () => {
+				expect( utils.getDefaultDropdownDefinitions( { has: pluginName => pluginName === 'ImageInlineEditing' } ) )
+					.to.deep.equal( [] );
+			} );
 
-						sinon.assert.notCalled( console.warn );
-					} );
-
-					it( 'should omit if no #items are present', () => {
-						expect( normalizeStyles(
-							allArrangements, [ { name: 'breakText', items: null } ]
-						) ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [] }
-						);
-					} );
-
-					it( 'should omit if #items are empty', () => {
-						expect( normalizeStyles(
-							allArrangements, [ { name: 'breakText', items: [] } ]
-						) ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [] }
-						);
-					} );
-
-					it( 'should warn about items not supported by any of the loaded editing plugins', () => {
-						const arrangement = { name: 'foo', modelElements: [ 'imageInline' ] };
-
-						expect( normalizeStyles(
-							[ arrangement, 'alignLeft' ],
-							[ { name: 'wrapText', items: [ 'foo', 'alignLeft' ] } ],
-							true,
-							false // ImageInlineEditing plugin is not loaded
-						) ).to.deep.equal( {
-							arrangements: [ DEFAULT_ARRANGEMENTS.alignLeft ],
-							groups: [ { name: 'wrapText', defaultItem: 'alignLeft', title: 'Wrap text', items: [ 'foo', 'alignLeft' ] } ]
-						} );
-
-						sinon.assert.calledOnce( console.warn );
-						sinon.assert.calledWithExactly( console.warn,
-							sinon.match( /^image-style-missing-dependency/ ),
-							{ arrangement, missingPlugins: [ 'ImageInlineEditing' ] },
-							sinon.match.string // Link to the documentation
-						);
-					} );
-				} );
-
-				describe( '#name not found in the default groups', () => {
-					it( 'should pass through if definition is valid', () => {
-						const groups = [ { name: 'inline', items: [ 'alignLeft' ], defaultItem: 'alignLeft' } ];
-
-						expect( normalizeStyles(
-							allArrangements, groups
-						) ).to.deep.equal(
-							{ arrangements: allArrangements, groups }
-						);
-
-						sinon.assert.notCalled( console.warn );
-					} );
-
-					it( 'should omit if no #items are present', () => {
-						expect( normalizeStyles(
-							allArrangements, [ { name: 'foo' } ]
-						) ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [] }
-						);
-					} );
-
-					it( 'should omit if #items are empty', () => {
-						expect( normalizeStyles(
-							allArrangements, [ { name: 'foo', items: [] } ]
-						) ).to.deep.equal(
-							{ arrangements: allArrangements, groups: [] }
-						);
-					} );
-
-					it( 'should warn and filter out the items which are not supported by any of the loaded editing plugins', () => {
-						const arrangement = { name: 'foo', modelElements: [ 'imageInline' ] };
-						const groups = [ { name: 'bar', defaultItem: 'alignLeft', items: [ 'foo', 'alignLeft' ] } ];
-
-						expect( normalizeStyles(
-							[ arrangement, 'alignLeft' ],
-							groups,
-							true,
-							false // ImageInlineEditing plugin is not loaded
-						) ).to.deep.equal( {
-							arrangements: [ DEFAULT_ARRANGEMENTS.alignLeft ],
-							groups
-						} );
-
-						sinon.assert.calledOnce( console.warn );
-						sinon.assert.calledWithExactly( console.warn,
-							sinon.match( /^image-style-missing-dependency/ ),
-							{ arrangement, missingPlugins: [ 'ImageInlineEditing' ] },
-							sinon.match.string // Link to the documentation
-						);
-					} );
-				} );
+			it( 'should always return a new instance of the drop-downs list', () => {
+				expect( utils.getDefaultDropdownDefinitions( { has: () => true } ) ).to.not.equal( utils.DEFAULT_DROPDOWN_DEFINITIONS );
 			} );
 		} );
 	} );

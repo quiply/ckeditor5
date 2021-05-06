@@ -6,6 +6,7 @@
 /* globals console */
 
 import EditingController from '../../src/controller/editingcontroller';
+import DataController from '../../src/controller/datacontroller';
 
 import Model from '../../src/model/model';
 import ModelElement from '../../src/model/element';
@@ -2468,6 +2469,59 @@ describe( 'DowncastHelpers', () => {
 			expectResult( '<p>Foo</p>' );
 		} );
 
+		it( 'default conversion, document fragment, text', () => {
+			const dataController = new DataController( model, new StylesProcessor() );
+			downcastHelpers = new DowncastHelpers( [ dataController.downcastDispatcher ] );
+
+			downcastHelpers.markerToData( { model: 'group' } );
+
+			let modelDocumentFragment;
+
+			model.change( writer => {
+				modelDocumentFragment = writer.createDocumentFragment();
+
+				writer.insertText( 'foobar', [], modelDocumentFragment, 0 );
+
+				const range = writer.createRange(
+					writer.createPositionFromPath( modelDocumentFragment, [ 2 ] ),
+					writer.createPositionFromPath( modelDocumentFragment, [ 5 ] )
+				);
+
+				modelDocumentFragment.markers.set( 'group:foo:bar', range );
+			} );
+
+			const expectedResult = 'fo<group-start name="foo:bar"></group-start>oba<group-end name="foo:bar"></group-end>r';
+
+			expect( dataController.stringify( modelDocumentFragment ) ).to.equal( expectedResult );
+		} );
+
+		it( 'default conversion, document fragment, element', () => {
+			const dataController = new DataController( model, new StylesProcessor() );
+			downcastHelpers = new DowncastHelpers( [ dataController.downcastDispatcher ] );
+
+			downcastHelpers.elementToElement( { model: 'paragraph', view: 'p' } );
+			downcastHelpers.markerToData( { model: 'group' } );
+
+			let modelDocumentFragment;
+
+			model.change( writer => {
+				modelDocumentFragment = writer.createDocumentFragment();
+
+				writer.insertElement( 'paragraph', [], modelDocumentFragment, 0 );
+
+				const range = writer.createRange(
+					writer.createPositionFromPath( modelDocumentFragment, [ 0 ] ),
+					writer.createPositionFromPath( modelDocumentFragment, [ 1 ] )
+				);
+
+				modelDocumentFragment.markers.set( 'group:foo:bar', range );
+			} );
+
+			const expectedResult = '<p data-group-end-after="foo:bar" data-group-start-before="foo:bar">&nbsp;</p>';
+
+			expect( dataController.stringify( modelDocumentFragment ) ).to.equal( expectedResult );
+		} );
+
 		it( 'conversion callback, mixed, multiple markers, name', () => {
 			const customData = {
 				foo: 'bar',
@@ -3458,7 +3512,7 @@ describe( 'downcast selection converters', () => {
 		downcastHelpers.markerToHighlight( { model: 'marker', view: { classes: 'marker' }, converterPriority: 1 } );
 
 		// Default selection converters.
-		dispatcher.on( 'selection', clearAttributes(), { priority: 'low' } );
+		dispatcher.on( 'selection', clearAttributes(), { priority: 'high' } );
 		dispatcher.on( 'selection', convertRangeSelection(), { priority: 'low' } );
 		dispatcher.on( 'selection', convertCollapsedSelection(), { priority: 'low' } );
 	} );
@@ -3848,6 +3902,50 @@ describe( 'downcast selection converters', () => {
 					dispatcher.convertSelection( modelDoc.selection, model.markers, writer );
 				} );
 
+				expect( viewSelection.rangeCount ).to.equal( 1 );
+
+				const viewString = stringifyView( viewRoot, viewSelection, { showType: false } );
+				expect( viewString ).to.equal( '<div>f{}oobar</div>' );
+			} );
+
+			it( 'should merge attribute elements from previous selection with overridden selection conversion', () => {
+				testSelection(
+					[ 3, 3 ],
+					'foobar',
+					'foo<strong>[]</strong>bar',
+					{ bold: 'true' }
+				);
+
+				const spy = sinon.spy();
+
+				dispatcher.on( 'selection', ( evt, data, conversionApi ) => {
+					const selection = data.selection;
+
+					if ( !conversionApi.consumable.consume( selection, 'selection' ) ) {
+						return;
+					}
+
+					const viewRanges = [];
+
+					for ( const range of selection.getRanges() ) {
+						viewRanges.push( conversionApi.mapper.toViewRange( range ) );
+					}
+
+					conversionApi.writer.setSelection( viewRanges, { backward: selection.isBackward } );
+
+					spy();
+				} );
+
+				view.change( writer => {
+					const modelRange = model.createRange( model.createPositionAt( modelRoot, 1 ), model.createPositionAt( modelRoot, 1 ) );
+					model.change( writer => {
+						writer.setSelection( modelRange );
+					} );
+
+					dispatcher.convertSelection( modelDoc.selection, model.markers, writer );
+				} );
+
+				expect( spy.calledOnce ).to.be.true;
 				expect( viewSelection.rangeCount ).to.equal( 1 );
 
 				const viewString = stringifyView( viewRoot, viewSelection, { showType: false } );

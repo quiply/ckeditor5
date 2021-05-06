@@ -8,7 +8,6 @@
  */
 
 import { Command } from 'ckeditor5/src/core';
-import { insertImage, isBlockImage, isInlineImage } from './utils';
 
 /**
  * The image type command. It changes the type of a selected image, depending on the configuration.
@@ -39,26 +38,65 @@ export default class ImageTypeCommand extends Command {
 	 * @inheritDoc
 	 */
 	refresh() {
-		const element = this.editor.model.document.selection.getSelectedElement();
+		const editor = this.editor;
+		const imageUtils = editor.plugins.get( 'ImageUtils' );
+		const element = imageUtils.getClosestSelectedImageElement( this.editor.model.document.selection );
 
 		if ( this._modelElementName === 'image' ) {
-			this.isEnabled = isInlineImage( element );
+			this.isEnabled = imageUtils.isInlineImage( element );
 		} else {
-			this.isEnabled = isBlockImage( element );
+			this.isEnabled = imageUtils.isBlockImage( element );
 		}
 	}
 
 	/**
-	 * @inheritDoc
+	 * Executes the command and changes the type of a selected image.
+	 *
+	 * @fires execute
+	 * @returns {Object|null} An object containing references to old and new model image elements
+	 * (for before and after the change) so external integrations can hook into the decorated
+	 * `execute` event and handle this change. `null` if the type change failed.
 	 */
 	execute() {
-		const selection = this.editor.model.document.selection;
-		const attributes = Object.fromEntries( selection.getSelectedElement().getAttributes() );
+		const editor = this.editor;
+		const model = this.editor.model;
+		const imageUtils = editor.plugins.get( 'ImageUtils' );
+		const oldElement = imageUtils.getClosestSelectedImageElement( model.document.selection );
+		const attributes = Object.fromEntries( oldElement.getAttributes() );
 
 		if ( !attributes.src ) {
-			return;
+			return null;
 		}
 
-		insertImage( this.editor, attributes, selection, this._modelElementName );
+		return model.change( writer => {
+			// Get all markers that contain the old image element.
+			const markers = Array.from( model.markers )
+				.filter( marker => marker.getRange().containsItem( oldElement ) );
+
+			const newElement = imageUtils.insertImage( attributes, model.createSelection( oldElement, 'on' ), this._modelElementName );
+
+			if ( !newElement ) {
+				return null;
+			}
+
+			const newElementRange = writer.createRangeOn( newElement );
+
+			// Expand the previously intersecting markers' ranges to include the new image element.
+			for ( const marker of markers ) {
+				const markerRange = marker.getRange();
+
+				// Join the survived part of the old marker range with the new element range
+				// (loosely because there could be some new paragraph or the existing one might got split).
+				const range = markerRange.root.rootName != '$graveyard' ?
+					markerRange.getJoined( newElementRange, true ) : newElementRange;
+
+				writer.updateMarker( marker, { range } );
+			}
+
+			return {
+				oldElement,
+				newElement
+			};
+		} );
 	}
 }

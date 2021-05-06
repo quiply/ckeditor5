@@ -10,6 +10,8 @@ import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictest
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import DataTransfer from '@ckeditor/ckeditor5-clipboard/src/datatransfer';
 import Clipboard from '@ckeditor/ckeditor5-clipboard/src/clipboard';
+import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
+import ListEditing from '@ckeditor/ckeditor5-list/src/listediting';
 
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 import normalizeHtml from '@ckeditor/ckeditor5-utils/tests/_utils/normalizehtml';
@@ -22,7 +24,7 @@ import InsertImageCommand from '../../src/image/insertimagecommand';
 import ImageCaption from '../../src/imagecaption';
 import ImageLoadObserver from '../../src/image/imageloadobserver';
 import ImageInlineEditing from '../../src/image/imageinlineediting';
-import { isImageWidget } from '../../src/image/utils';
+import ImageResizeEditing from '../../src/imageresize/imageresizeediting';
 
 describe( 'ImageInlineEditing', () => {
 	let editor, model, doc, view, viewDocument;
@@ -464,7 +466,7 @@ describe( 'ImageInlineEditing', () => {
 				const element = viewDocument.getRoot().getChild( 0 ).getChild( 0 );
 
 				expect( element.name ).to.equal( 'span' );
-				expect( isImageWidget( element ) ).to.be.true;
+				expect( editor.plugins.get( 'ImageUtils' ).isImageWidget( element ) ).to.be.true;
 			} );
 
 			it( 'should convert attribute change', () => {
@@ -641,7 +643,16 @@ describe( 'ImageInlineEditing', () => {
 			document.body.appendChild( editorElement );
 
 			editor = await ClassicTestEditor.create( editorElement, {
-				plugins: [ ImageInlineEditing, ImageBlockEditing, ImageCaption, Clipboard, Paragraph ]
+				plugins: [
+					ImageInlineEditing,
+					ImageBlockEditing,
+					ImageCaption,
+					ImageResizeEditing,
+					Clipboard,
+					LinkImage,
+					Paragraph,
+					ListEditing
+				]
 			} );
 
 			model = editor.model;
@@ -667,6 +678,23 @@ describe( 'ImageInlineEditing', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>f<imageInline src="/assets/sample.png"></imageInline>[]oo</paragraph>'
+			);
+		} );
+
+		it( 'should paste or drop a block image as inline in the empty list item', () => {
+			const dataTransfer = new DataTransfer( {
+				types: [ 'text/html' ],
+				getData: () => '<figure class="image"><img src="/assets/sample.png" /></figure>'
+			} );
+
+			setModelData( model, '<listItem listType="bulleted" listIndent="0"></listItem>' );
+
+			viewDocument.fire( 'clipboardInput', { dataTransfer } );
+
+			expect( getModelData( model ) ).to.equal(
+				'<listItem listIndent="0" listType="bulleted">' +
+					'<imageInline src="/assets/sample.png"></imageInline>[]' +
+				'</listItem>'
 			);
 		} );
 
@@ -772,6 +800,60 @@ describe( 'ImageInlineEditing', () => {
 
 			expect( getModelData( model ) ).to.equal(
 				'<paragraph>f<imageInline alt="abc" src="/assets/sample.png"></imageInline>[]oo</paragraph>'
+			);
+		} );
+
+		it( 'should preserve image link when converting to an inline image (LinkImage integration)', () => {
+			const dataTransfer = new DataTransfer( {
+				types: [ 'text/html' ],
+				getData: () => '<figure class="image"><a href="https://cksource.com"><img src="/assets/sample.png" /></a></figure>'
+			} );
+
+			setModelData( model, '<paragraph>f[]oo</paragraph>' );
+
+			viewDocument.fire( 'clipboardInput', { dataTransfer } );
+
+			expect( getModelData( model ) ).to.equal(
+				'<paragraph>f<imageInline linkHref="https://cksource.com" src="/assets/sample.png"></imageInline>[]oo</paragraph>'
+			);
+		} );
+
+		it( 'should pass custom attributes present only on the figure when converting to an inline image', () => {
+			model.schema.extend( 'imageInline', { allowAttributes: [ 'foo' ] } );
+			editor.conversion.for( 'upcast' ).attributeToAttribute( { model: 'foo', view: 'foo' } );
+
+			const dataTransfer = new DataTransfer( {
+				types: [ 'text/html' ],
+				getData: () => (
+					'<figure class="image" foo="bar">' +
+						'<img src="/assets/sample.png" />' +
+					'</figure>'
+				)
+			} );
+
+			setModelData( model, '<paragraph>f[]oo</paragraph>' );
+			viewDocument.fire( 'clipboardInput', { dataTransfer } );
+
+			expect( getModelData( model ) ).to.equal(
+				'<paragraph>f<imageInline foo="bar" src="/assets/sample.png"></imageInline>[]oo</paragraph>'
+			);
+		} );
+
+		it( 'should pass the style#width from figure when converting to an inline image (ImageResize integration)', () => {
+			const dataTransfer = new DataTransfer( {
+				types: [ 'text/html' ],
+				getData: () => (
+					'<figure class="image image_resized" style="width:25%">' +
+						'<img src="/assets/sample.png" />' +
+					'</figure>'
+				)
+			} );
+
+			setModelData( model, '<paragraph>f[]oo</paragraph>' );
+			viewDocument.fire( 'clipboardInput', { dataTransfer } );
+
+			expect( getModelData( model ) ).to.equal(
+				'<paragraph>f<imageInline src="/assets/sample.png" width="25%"></imageInline>[]oo</paragraph>'
 			);
 		} );
 	} );
