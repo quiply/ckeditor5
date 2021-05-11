@@ -21,7 +21,7 @@ module.exports = {
 
 	output: {
 		// The name under which the editor will be exported.
-		library: 'ClassicEditor',
+		library: 'CKEDITOR',
 
 		path: path.resolve( __dirname, 'build' ),
 		filename: 'ckeditor.js',
@@ -32,7 +32,7 @@ module.exports = {
 	optimization: {
 		minimizer: [
 			new TerserPlugin( {
-				sourceMap: true,
+				// sourceMap: true,
 				terserOptions: {
 					output: {
 						// Preserve CKEditor 5 license comments.
