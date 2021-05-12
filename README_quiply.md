@@ -14,7 +14,6 @@ recommend: rm -rf node_modules && yarn install
 Build:
 ===
 
-// npm install / yarn install
 cd packages/ckeditor5-build-classic
 yarn install
 yarn add --dev @ckeditor/ckeditor5-editor-inline

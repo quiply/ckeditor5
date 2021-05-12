@@ -109,11 +109,12 @@ const pluginsClassic = [
 
 const pluginsInline = [
 	Autoformat,
+	BlockQuote,
 	Bold,
 	Essentials,
 	Heading,
 	Italic,
-	BlockQuote,
+	List,
 	Mention,
 	TextTransformation
 ];
