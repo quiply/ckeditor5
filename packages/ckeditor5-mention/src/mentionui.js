@@ -72,6 +72,14 @@ export default class MentionUI extends Plugin {
 		this._mentionsConfigurations = new Map();
 
 		/**
+		 * Quiply: Stores preferred position of the popup
+		 *
+		 * @type {Boolean}
+		 * @private
+		 */
+		this._qyPositionPreferredNorth = false;
+
+		/**
 		 * Debounced feed requester. It uses `lodash#debounce` method to delay function call.
 		 *
 		 * @private
@@ -162,6 +170,9 @@ export default class MentionUI extends Plugin {
 
 			this._mentionsConfigurations.set( marker, definition );
 		}
+
+		// 2021-05-11 Quiply: parameter to change preferred positions
+		this._qyPositionPreferredNorth = editor.config.get( 'mention.qyPositionPreferredNorth' );
 
 		this.on( 'requestFeed:response', ( evt, data ) => this._handleFeedResponse( data ) );
 		this.on( 'requestFeed:error', () => this._hideUIAndRemoveMarker() );
@@ -443,11 +454,13 @@ export default class MentionUI extends Plugin {
 	_showOrUpdateUI( markerMarker ) {
 		if ( this._isUIVisible ) {
 			// Update balloon position as the mention list view may change its size.
-			this._balloon.updatePosition( this._getBalloonPanelPositionData( markerMarker, this._mentionsView.position ) );
+			this._balloon.updatePosition( this._getBalloonPanelPositionData( markerMarker, this._mentionsView.position,
+				this._qyPositionPreferredNorth ) );
 		} else {
 			this._balloon.add( {
 				view: this._mentionsView,
-				position: this._getBalloonPanelPositionData( markerMarker, this._mentionsView.position ),
+				position: this._getBalloonPanelPositionData( markerMarker, this._mentionsView.position,
+					this._qyPositionPreferredNorth ),
 				withArrow: false,
 				singleViewMode: true
 			} );
@@ -523,7 +536,7 @@ export default class MentionUI extends Plugin {
 	 * @returns {module:utils/dom/position~Options}
 	 * @private
 	 */
-	_getBalloonPanelPositionData( mentionMarker, preferredPosition ) {
+	_getBalloonPanelPositionData( mentionMarker, preferredPosition , qyPositionPreferredNorth) {
 		const editor = this.editor;
 		const editing = editor.editing;
 		const domConverter = editing.view.domConverter;
@@ -555,7 +568,7 @@ export default class MentionUI extends Plugin {
 
 				return null;
 			},
-			positions: getBalloonPanelPositions( preferredPosition )
+			positions: getBalloonPanelPositions( preferredPosition, qyPositionPreferredNorth )
 		};
 	}
 }
@@ -564,7 +577,7 @@ export default class MentionUI extends Plugin {
 //
 // @param {String} preferredPosition
 // @returns {Array.<module:utils/dom/position~Position>}
-function getBalloonPanelPositions( preferredPosition ) {
+function getBalloonPanelPositions( preferredPosition, qyPositionPreferredNorth ) {
 	const positions = {
 		// Positions the panel to the southeast of the caret rectangle.
 		'caret_se': targetRect => {
@@ -610,13 +623,24 @@ function getBalloonPanelPositions( preferredPosition ) {
 		];
 	}
 
-	// By default return all position callbacks.
-	return [
-		positions.caret_se,
-		positions.caret_sw,
-		positions.caret_ne,
-		positions.caret_nw
-	];
+	// 2021-05-11 Quiply: parameter to change preferred positions
+	if ( qyPositionPreferredNorth ) {
+		// By default return all position callbacks.
+		return [
+			positions.caret_ne,
+			positions.caret_nw,
+			positions.caret_se,
+			positions.caret_sw
+		];
+	} else {
+		// By default return all position callbacks.
+		return [
+			positions.caret_se,
+			positions.caret_sw,
+			positions.caret_ne,
+			positions.caret_nw
+		];
+	}
 }
 
 // Creates a RegExp pattern for the marker.
