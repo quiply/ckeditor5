@@ -21,7 +21,6 @@ import FontColor from '@ckeditor/ckeditor5-font/src/fontcolor';
 import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily';
 import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-import Highlight from '@ckeditor/ckeditor5-highlight/src/highlight';
 import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
 import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import Image from '@ckeditor/ckeditor5-image/src/image';
@@ -115,7 +114,8 @@ const pluginsInline = [
 	Heading,
 	Italic,
 	BlockQuote,
-	Mention
+	Mention,
+	TextTransformation
 ];
 
 ClassicEditor.builtinPlugins = pluginsClassic;
