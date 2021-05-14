@@ -14,8 +14,9 @@ import nature from '../data/nature.json';
 import objects from '../data/objects.json';
 import people from '../data/people.json';
 import travel from '../data/travel.json';
+import symbols from '../data/symbols.json';
+import flags from '../data/flags.json';
 
-const ALL_SPECIAL_CHARACTERS_GROUP = 'All';
 export default class Emojis extends Plugin {
 	/**
 	 * @inheritDoc
@@ -52,6 +53,14 @@ export default class Emojis extends Plugin {
 		 * @member {Map.<String, Set.<String>>} #_groups
 		 */
 		this._groups = new Map();
+
+		/**
+		 * Registered groups. Each group contains a collection with symbol names.
+		 *
+		 * @private
+		 * @member {String} #_allSpecialCharactersGroup
+		 */
+		this._allSpecialCharactersGroup = '';
 	}
 
 	/**
@@ -101,12 +110,16 @@ export default class Emojis extends Plugin {
 		} );
 
 		try {
-			this.addItems( 'People', people );
-			this.addItems( 'Activities', activities );
-			this.addItems( 'Food', food );
-			this.addItems( 'Nature', nature );
-			this.addItems( 'Objects', objects );
-			this.addItems( 'Travel', travel );
+			this._allSpecialCharactersGroup = t( 'All' );
+
+			this.addItems( t( 'People' ), people );
+			this.addItems( t( 'Nature' ), nature );
+			this.addItems( t( 'Food' ), food );
+			this.addItems( t( 'Activities' ), activities );
+			this.addItems( t( 'Travel' ), travel );
+			this.addItems( t( 'Objects' ), objects );
+			this.addItems( t( 'Symbols' ), symbols );
+			this.addItems( t( 'Flags' ), flags );
 		} catch ( error ) {
 			throw new CKEditorError(
 				'emojis-json-parse: Ran into issues trying to parse json file of available emojis.'
@@ -124,7 +137,7 @@ export default class Emojis extends Plugin {
 	 * @param {Array.<module:special-characters/specialcharacters~SpecialCharacterDefinition>} items
 	 */
 	addItems( groupName, items ) {
-		if ( groupName === ALL_SPECIAL_CHARACTERS_GROUP ) {
+		if ( groupName === this._allSpecialCharactersGroup ) {
 			/**
 			 * The name "All" for a special category group cannot be used because it is a special category that displays all
 			 * available special characters.
@@ -132,7 +145,7 @@ export default class Emojis extends Plugin {
 			 * @error emojis-invalid-group-name
 			 */
 			throw new CKEditorError(
-				`emojis-invalid-group-name: The name "${ ALL_SPECIAL_CHARACTERS_GROUP }" is reserved and cannot be used.`
+				`emojis-invalid-group-name: The name "${ this._allSpecialCharactersGroup }" is reserved and cannot be used.`
 			);
 		}
 
@@ -160,7 +173,7 @@ export default class Emojis extends Plugin {
 	 * @returns {Set.<String>|undefined}
 	 */
 	getCharactersForGroup( groupName ) {
-		if ( groupName === ALL_SPECIAL_CHARACTERS_GROUP ) {
+		if ( groupName === this._allSpecialCharactersGroup ) {
 			return new Set( this._characters.keys() );
 		}
 
@@ -224,7 +237,7 @@ export default class Emojis extends Plugin {
 		const emojiGroups = [ ...this.getGroups() ];
 
 		// Add a special group that shows all available emojis
-		emojiGroups.unshift( ALL_SPECIAL_CHARACTERS_GROUP );
+		emojiGroups.unshift( this._allSpecialCharactersGroup );
 
 		const navigationView = new SpecialCharactersNavigationView( locale, emojiGroups );
 		const gridView = new CharacterGridView( locale );
