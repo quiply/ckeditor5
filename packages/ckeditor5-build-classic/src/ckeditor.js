@@ -53,6 +53,9 @@ import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
+import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters';
+import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials';
+import Emojis from '@harrisonlucas/ckeditor5-emojis/src/emojis';
 
 class ClassicEditor extends ClassicEditorBase {}
 class InlineEditor extends InlineEditorBase {}
@@ -104,7 +107,9 @@ const pluginsClassic = [
 	TableToolbar,
 	TextTransformation,
 	TodoList,
-	Underline
+	Underline,
+
+	Emojis
 ];
 
 const pluginsInline = [
@@ -116,15 +121,17 @@ const pluginsInline = [
 	Italic,
 	List,
 	Mention,
-	TextTransformation
+	TextTransformation,
+
+	Emojis
 ];
 
 ClassicEditor.builtinPlugins = pluginsClassic;
 InlineEditor.builtinPlugins = pluginsInline;
 
 // Editor configuration.
-const configClassic = {};
-const configInline = {};
+const configClassic = {toolbar: [ 'emojis' ]};
+const configInline = {toolbar: [ 'emojis' ]};
 
 ClassicEditor.defaultConfig = configClassic;
 InlineEditor.defaultConfig = configInline;

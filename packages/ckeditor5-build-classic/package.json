@@ -49,7 +49,9 @@
     "@ckeditor/ckeditor5-table": "^27.1.0",
     "@ckeditor/ckeditor5-theme-lark": "^27.1.0",
     "@ckeditor/ckeditor5-typing": "^27.1.0",
-    "@ckeditor/ckeditor5-undo": "^27.1.0"
+    "@ckeditor/ckeditor5-undo": "^27.1.0",
+
+    "@harrisonlucas/ckeditor5-emojis": "^1.0.1-quiply"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^27.1.0",
