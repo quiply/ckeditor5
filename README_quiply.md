@@ -26,3 +26,10 @@ Error
 ===
 
 remove node_modules and build again
+                       
+
+Customized or added
+===
+
+- Changes in ckeditor5-mention
+- Added ckeditor5-emojis (originally from here https://github.com/harrisonlucaswork/ckeditor5-emojis/tree/master)
