@@ -51,10 +51,9 @@ import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperti
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
+import Title from '@ckeditor/ckeditor5-heading/src/title';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
-import SpecialCharacters from '@ckeditor/ckeditor5-special-characters/src/specialcharacters';
-import SpecialCharactersEssentials from '@ckeditor/ckeditor5-special-characters/src/specialcharactersessentials';
 import Emojis from '@harrisonlucas/ckeditor5-emojis/src/emojis';
 
 class ClassicEditor extends ClassicEditorBase {}
@@ -105,6 +104,7 @@ const pluginsClassic = [
 	TableCellProperties,
 	TableProperties,
 	TableToolbar,
+	Title,
 	TextTransformation,
 	TodoList,
 	Underline,
