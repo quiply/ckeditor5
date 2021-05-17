@@ -237,7 +237,7 @@ export default class Emojis extends Plugin {
 		const emojiGroups = [ ...this.getGroups() ];
 
 		// Add a special group that shows all available emojis
-		emojiGroups.unshift( this._allSpecialCharactersGroup );
+		emojiGroups.push( this._allSpecialCharactersGroup );
 
 		const navigationView = new SpecialCharactersNavigationView( locale, emojiGroups );
 		const gridView = new CharacterGridView( locale );
