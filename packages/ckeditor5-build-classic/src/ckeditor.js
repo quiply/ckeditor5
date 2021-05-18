@@ -92,7 +92,7 @@ const pluginsClassic = [
 	List,
 	ListStyle,
 	MediaEmbed,
-	MediaEmbedToolbar,
+	// MediaEmbedToolbar,
 	Mention,
 	Paragraph,
 	PasteFromOffice,
@@ -114,6 +114,7 @@ const pluginsClassic = [
 
 const pluginsInline = [
 	Autoformat,
+	AutoImage,
 	BlockQuote,
 	Bold,
 	Essentials,
@@ -124,7 +125,9 @@ const pluginsInline = [
 	ImageToolbar,
 	ImageUpload,
 	Italic,
+	Link,
 	List,
+	MediaEmbed,
 	Mention,
 	TextTransformation,
 
