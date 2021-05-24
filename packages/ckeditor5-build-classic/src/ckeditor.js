@@ -117,6 +117,8 @@ const pluginsInline = [
 	AutoImage,
 	BlockQuote,
 	Bold,
+	Code,
+	CodeBlock,
 	Essentials,
 	Heading,
 	Image,
