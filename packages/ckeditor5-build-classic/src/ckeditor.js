@@ -5,7 +5,7 @@
 
 // The editor creator to use.
 import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
-import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
+// import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
 
 import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 import AutoImage from '@ckeditor/ckeditor5-image/src/autoimage';
@@ -22,7 +22,7 @@ import FontFamily from '@ckeditor/ckeditor5-font/src/fontfamily';
 import FontSize from '@ckeditor/ckeditor5-font/src/fontsize';
 import Heading from '@ckeditor/ckeditor5-heading/src/heading';
 import HorizontalLine from '@ckeditor/ckeditor5-horizontal-line/src/horizontalline';
-import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
+// import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 import Image from '@ckeditor/ckeditor5-image/src/image';
 import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
 import ImageInsert from '@ckeditor/ckeditor5-image/src/imageinsert';
@@ -38,7 +38,7 @@ import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 import List from '@ckeditor/ckeditor5-list/src/list';
 import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
-import MediaEmbedToolbar from '@ckeditor/ckeditor5-media-embed/src/mediaembedtoolbar';
+// import MediaEmbedToolbar from '@ckeditor/ckeditor5-media-embed/src/mediaembedtoolbar';
 import Mention from '@ckeditor/ckeditor5-mention/src/mention';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import PasteFromOffice from '@ckeditor/ckeditor5-paste-from-office/src/pastefromoffice';
@@ -57,7 +57,7 @@ import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
 import Emojis from '@harrisonlucas/ckeditor5-emojis/src/emojis';
 
 class ClassicEditor extends ClassicEditorBase {}
-class InlineEditor extends InlineEditorBase {}
+// class InlineEditor extends InlineEditorBase {}
 
 // Plugins to include in the build.
 const pluginsClassic = [
@@ -76,7 +76,7 @@ const pluginsClassic = [
 	FontSize,
 	Heading,
 	HorizontalLine,
-	HtmlEmbed,
+	// HtmlEmbed,
 	Image,
 	ImageCaption,
 	ImageInsert,
@@ -112,40 +112,40 @@ const pluginsClassic = [
 	Emojis
 ];
 
-const pluginsInline = [
-	Autoformat,
-	AutoImage,
-	BlockQuote,
-	Bold,
-	Code,
-	CodeBlock,
-	Essentials,
-	Heading,
-	Image,
-	ImageInsert,
-	ImageStyle,
-	ImageToolbar,
-	ImageUpload,
-	Italic,
-	Link,
-	List,
-	MediaEmbed,
-	Mention,
-	TextTransformation,
-
-	Emojis
-];
+// const pluginsInline = [
+// 	Autoformat,
+// 	AutoImage,
+// 	BlockQuote,
+// 	Bold,
+// 	Code,
+// 	CodeBlock,
+// 	Essentials,
+// 	Heading,
+// 	Image,
+// 	ImageInsert,
+// 	ImageStyle,
+// 	ImageToolbar,
+// 	ImageUpload,
+// 	Italic,
+// 	Link,
+// 	List,
+// 	MediaEmbed,
+// 	Mention,
+// 	TextTransformation,
+//
+// 	Emojis
+// ];
 
 ClassicEditor.builtinPlugins = pluginsClassic;
-InlineEditor.builtinPlugins = pluginsInline;
+// InlineEditor.builtinPlugins = pluginsInline;
 
 // Editor configuration.
-const configClassic = {toolbar: [ 'emojis' ]};
-const configInline = {toolbar: [ 'emojis' ]};
+const configClassic = {};
+// const configInline = {toolbar: [ 'emojis' ]};
 
 ClassicEditor.defaultConfig = configClassic;
-InlineEditor.defaultConfig = configInline;
+// InlineEditor.defaultConfig = configInline;
 
 export default {
-	ClassicEditor, InlineEditor
+	ClassicEditor
 };
