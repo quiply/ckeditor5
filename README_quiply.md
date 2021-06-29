@@ -5,22 +5,29 @@ Super build: https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integratio
 Update git:
 ===
 
-cd packages/ckeditor5-build-classic
-git fetch upstream
-git merge upstream/stable
+1) cd packages/ckeditor5-build-classic
+2) git fetch upstream
+3) "git merge upstream/stable" or "git rebase upstream/stable"
+4) -> conflicts: ignore conflicts in build directory (build/ckeditor.js and build/translations/*)
+5) -> update versions in ckeditor5-build-classic/package.json and(!) in ckeditor5-emojis/package.json  
 
-recommend: rm -rf node_modules && yarn install
+6) recommend: rm -rf node_modules && yarn install
            
 Build:
 ===
 
-cd packages/ckeditor5-build-classic
-yarn install
-yarn add --dev @ckeditor/ckeditor5-editor-inline
-yarn run build
+first time:
+1) cd packages/ckeditor5-build-classic
+2) yarn install
+3) yarn add --dev @ckeditor/ckeditor5-editor-inline
+4) yarn run build
                                                                                           
 -> check new build, open sample/index.html
 -> copy packages/ckeditor5-build-classic/ckeditor.js and ckeditor.js.map in Quiply project
+
+if has already run once:         
+1) cd packages/ckeditor5-build-classic
+2) yarn run build
 
 Error
 ===
