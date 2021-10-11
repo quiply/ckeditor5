@@ -8,8 +8,7 @@
  */
 
 import TableWalker from './../tablewalker';
-import { setHighlightHandling, toWidget, toWidgetEditable } from 'ckeditor5/src/widget';
-import { toArray } from 'ckeditor5/src/utils';
+import { toWidget, toWidgetEditable } from 'ckeditor5/src/widget';
 
 /**
  * Model table element to view table element conversion helper.
@@ -258,9 +257,7 @@ export function convertParagraphInTableCell( modelElement, conversionApi ) {
 	}
 
 	if ( isSingleParagraphWithoutAttributes( modelElement ) ) {
-		// Use display:inline-block to force Chrome/Safari to limit text mutations to this element.
-		// See #6062.
-		return writer.createContainerElement( 'span', { style: 'display:inline-block' } );
+		return writer.createContainerElement( 'span', { class: 'ck-table-bogus-paragraph' } );
 	} else {
 		return writer.createContainerElement( 'p' );
 	}
@@ -271,7 +268,7 @@ export function convertParagraphInTableCell( modelElement, conversionApi ) {
  *
  * The paragraph should be converted in the editing view to:
  *
- * * If returned `true` - to a `<span style="display:inline-block">`
+ * * If returned `true` - to a `<span class="ck-table-bogus-paragraph">`
  * * If returned `false` - to a `<p>`
  *
  * @param {module:engine/model/element~Element} modelElement
@@ -313,13 +310,6 @@ function renameViewTableCell( tableCell, desiredCellElementName, conversionApi )
 	const editable = viewWriter.createEditableElement( desiredCellElementName, viewCell.getAttributes() );
 	const renamedCell = toWidgetEditable( editable, viewWriter );
 
-	setHighlightHandling(
-		renamedCell,
-		viewWriter,
-		( element, descriptor, writer ) => writer.addClass( toArray( descriptor.classes ), element ),
-		( element, descriptor, writer ) => writer.removeClass( toArray( descriptor.classes ), element )
-	);
-
 	viewWriter.insert( viewWriter.createPositionAfter( viewCell ), renamedCell );
 	viewWriter.move( viewWriter.createRangeIn( viewCell ), viewWriter.createPositionAt( renamedCell, 0 ) );
 	viewWriter.remove( viewWriter.createRangeOn( viewCell ) );
@@ -360,15 +350,6 @@ function createViewTableCellElement( tableSlot, tableAttributes, insertPosition,
 	const cellElement = asWidget ?
 		toWidgetEditable( conversionApi.writer.createEditableElement( cellElementName ), conversionApi.writer ) :
 		conversionApi.writer.createContainerElement( cellElementName );
-
-	if ( asWidget ) {
-		setHighlightHandling(
-			cellElement,
-			conversionApi.writer,
-			( element, descriptor, writer ) => writer.addClass( toArray( descriptor.classes ), element ),
-			( element, descriptor, writer ) => writer.removeClass( toArray( descriptor.classes ), element )
-		);
-	}
 
 	const tableCell = tableSlot.cell;
 

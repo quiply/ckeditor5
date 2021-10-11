@@ -127,21 +127,21 @@ To avoid such troubles, and to make collaborative editing possible for real, CKE
 ```html
 <paragraph>
 	"Foo "
-	<image></image>
+	<imageInline></imageInline>
 	"bar"
 </paragraph>
 ```
 
-The `"Foo "` text node is at index `0` in its parent, `<image></image>` is at index `1` and `"bar"` is at index `2`.
+The `"Foo "` text node is at index `0` in its parent, `<imageInline></imageInline>` is at index `1` and `"bar"` is at index `2`.
 
 On the other hand, offset `x` in `<paragraph>` translates to:
 
-| Offset | Position                                         | Node      |
-|--------|--------------------------------------------------|-----------|
-| `0`    | `<paragraph>^Foo <image></image>bar</paragraph>` | `"Foo "`  |
-| `1`    | `<paragraph>F^oo <image></image>bar</paragraph>` | `"Foo "`  |
-| `4`    | `<paragraph>Foo ^<image></image>bar</paragraph>` | `<image>` |
-| `6`    | `<paragraph>Foo <image></image>b^ar</paragraph>` | `"bar"`   |
+| Offset | Position                                                     | Node            |
+|--------|--------------------------------------------------------------|-----------------|
+| `0`    | `<paragraph>^Foo <imageInline></imageInline>bar</paragraph>` | `"Foo "`        |
+| `1`    | `<paragraph>F^oo <imageInline></imageInline>bar</paragraph>` | `"Foo "`        |
+| `4`    | `<paragraph>Foo ^<imageInline></imageInline>bar</paragraph>` | `<imageInline>` |
+| `6`    | `<paragraph>Foo <imageInline></imageInline>b^ar</paragraph>` | `"bar"`         |
 
 ### Positions, ranges and selections
 
@@ -330,7 +330,7 @@ By default, the view adds the following observers:
 Additionally, some features add their own observers. For instance, the {@link module:clipboard/clipboard~Clipboard clipboard feature} adds {@link module:clipboard/clipboardobserver~ClipboardObserver}.
 
 <info-box>
-	For a complete list of events fired by observes check the {@link module:engine/view/document~Document}'s list of events.
+	For a complete list of events fired by observers check the {@link module:engine/view/document~Document}'s list of events.
 </info-box>
 
 You can add your own observer (which should be a subclass of {@link module:engine/view/observer/observer~Observer}) by using the {@link module:engine/view/view~View#addObserver `view.addObserver()`} method. Check the code of existing observers to learn how to write them: https://github.com/ckeditor/ckeditor5-engine/tree/master/src/view/observer.
