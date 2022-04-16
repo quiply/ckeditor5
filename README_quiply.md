@@ -13,7 +13,7 @@ Update git:
 
 6) recommend: rm -rf node_modules && yarn install
            
-Build:
+Build new ckeditor version:
 ===
 
 first time:
@@ -21,13 +21,14 @@ first time:
 2) yarn install
 3) yarn add --dev @ckeditor/ckeditor5-editor-inline
 4) yarn run build
-                                                                                          
--> check new build, open sample/index.html
--> copy packages/ckeditor5-build-classic/build/ckeditor.js, ckeditor.js.map and translations (de.js etc.) in Quiply project
 
 if has already run once:         
 1) cd packages/ckeditor5-build-classic
 2) yarn run build
+
+
+-> check new build, open sample/index.html
+-> copy packages/ckeditor5-build-classic/build/ckeditor.js, ckeditor.js.map and translations (de.js etc.) in Quiply project
 
 Error
 ===

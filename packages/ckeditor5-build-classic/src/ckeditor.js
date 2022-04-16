@@ -36,7 +36,7 @@ import Italic from '@ckeditor/ckeditor5-basic-styles/src/italic';
 import Link from '@ckeditor/ckeditor5-link/src/link';
 import LinkImage from '@ckeditor/ckeditor5-link/src/linkimage';
 import List from '@ckeditor/ckeditor5-list/src/list';
-import ListStyle from '@ckeditor/ckeditor5-list/src/liststyle';
+import ListProperties from '@ckeditor/ckeditor5-list/src/listproperties';
 import MediaEmbed from '@ckeditor/ckeditor5-media-embed/src/mediaembed';
 // import MediaEmbedToolbar from '@ckeditor/ckeditor5-media-embed/src/mediaembedtoolbar';
 import Mention from '@ckeditor/ckeditor5-mention/src/mention';
@@ -90,7 +90,7 @@ const pluginsClassic = [
 	Link,
 	LinkImage,
 	List,
-	ListStyle,
+	ListProperties,
 	MediaEmbed,
 	// MediaEmbedToolbar,
 	Mention,
