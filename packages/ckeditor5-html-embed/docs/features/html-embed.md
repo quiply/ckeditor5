@@ -5,7 +5,7 @@ menu-title: HTML embed
 
 # HTML embed
 
-The {@link module:html-embed/htmlembed~HtmlEmbed} plugin allows embedding an arbitrary HTML snippet in the editor. The feature is targeted at more advanced users who want to directly interact with HTML fragments.
+The HTML embed feature allows embedding an arbitrary HTML snippet in the editor. The feature is targeted at more advanced users who want to directly interact with HTML fragments.
 
 This feature can be used to embed any HTML code and bypass the CKEditor 5's filtering mechanisms. Thanks to that it is possible to enrich content produced by CKEditor 5 with fragments of HTML that are not supported by any other CKEditor 5 feature.
 
@@ -26,11 +26,19 @@ It is recommended to use the {@link features/media-embed media embed} feature fo
 	Incorrect configuration may **lead to security issues**.
 </info-box>
 
+<info-box info>
+	The HTML embed feature is enabled by default in the {@link installation/getting-started/predefined-builds#superbuild superbuild} only. See the [installation](#installation) section to learn how to enable it in your editor.
+</info-box>
+
 ## Demo
 
 Use the HTML embed toolbar button {@icon @ckeditor/ckeditor5-html-embed/theme/icons/html.svg HTML embed} in the editor below to see the plugin in action. Click the **"Preview editor data"** button below the editor to see a preview of the editor content, including the embedded HTML.
 
 {@snippet features/html-embed}
+
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
 
 ## Related features
 
@@ -54,15 +62,15 @@ import HtmlEmbed from '@ckeditor/ckeditor5-html-embed/src/htmlembed';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ HtmlEmbed, ... ],
-		toolbar: [ 'htmlEmbed', ... ],
+		plugins: [ HtmlEmbed, /* ... */ ],
+		toolbar: [ 'htmlEmbed', /* ... */ ],
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box info>
-	Read more about {@link installation/getting-started/installing-plugins installing plugins}.
+	Read more about {@link installation/plugins/installing-plugins installing plugins}.
 </info-box>
 
 ## Configuration
@@ -76,8 +84,8 @@ However, by showing previews of the embedded HTML snippets, you expose the users
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ HtmlEmbed, ... ],
-		toolbar: [ 'htmlEmbed', ... ],
+		plugins: [ HtmlEmbed, /* ... */ ],
+		toolbar: [ 'htmlEmbed', /* ... */ ],
 		htmlEmbed: {
 			showPreviews: true,
 			sanitizeHtml: ( inputHtml ) => {
@@ -93,8 +101,8 @@ ClassicEditor
 			}
 		}
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 Currently, the [feature does not execute `<script>` tags](https://github.com/ckeditor/ckeditor5/issues/8326) so the content that requires executing JavaScript in order to generate a preview will not show in the editor. However, other JavaScript code, for example, used in `on*` observers and `src="javascript:..."` attributes will be executed and therefore a sanitizer still needs to be enabled.
@@ -103,15 +111,13 @@ Read more about the security aspect in the next section.
 
 ### Security
 
-If the HTML embed feature is configured to [show content previews](#content-previews), the HTML that the user inserts into the HTML embed widget is then rendered back to the user. If the HTML was rendered as-is, any JavaScript code included in these HTML snippets would be executed by the browser in the context of your website.
+If the HTML embed feature is configured to [show content previews](#content-previews), the HTML that the user inserts into the HTML embed widget is then rendered back to the user. **If the HTML was rendered as-is, any JavaScript code included in these HTML snippets would be executed by the browser in the context of your website**.
 
 This, in turn, is a plain security risk. The HTML provided by the user might be mistakenly copied from a malicious website or end up in the user's clipboard (as it would usually be copied and pasted) by any other means.
 
 In some cases, advanced users can be instructed to never paste HTML code from untrusted sources. However, in most cases, it is highly recommended to properly secure the system by configuring the HTML embed feature to use an HTML sanitizer and, optionally, by setting strict CSP rules.
 
 <info-box>
-	The HTML embed feature [does not currently execute code in `<script>` tags](https://github.com/ckeditor/ckeditor5/issues/8326). However, it will execute code in the `on*` and `src="javascript:..."` attributes.
-
 	The tricky part is that some HTML snippets require JavaScript to be executed to render any meaningful previews (for example, Facebook embeds). Some, in turn, do not make sense to be executed (analytics code).
 
 	Therefore, when configuring the sanitizer and CSP rules, you can take these situations into consideration and for instance, allow `<script>` tags pointing only to certain domains (e.g. a trusted external page that requires JavaScript).
@@ -154,4 +160,4 @@ editor.execute( 'htmlEmbed', '<b>New content.</b>' );
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-html-embed.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-html-embed](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-html-embed).

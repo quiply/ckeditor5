@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -357,7 +357,21 @@ describe( 'BalloonEditor', () => {
 				} );
 		} );
 
+		// We don't update the source element by default, so after destroy, it should contain the data
+		// from the editing pipeline.
+		it( 'don\'t set the data back to the editor element', () => {
+			editor.setData( '<p>a</p><heading>b</heading>' );
+
+			return editor.destroy()
+				.then( () => {
+					expect( editorElement.innerHTML ).to.equal( '' );
+				} );
+		} );
+
+		// Adding `updateSourceElementOnDestroy` config to the editor allows setting the data
+		// back to the source element after destroy.
 		it( 'sets the data back to the editor element', () => {
+			editor.config.set( 'updateSourceElementOnDestroy', true );
 			editor.setData( '<p>a</p><heading>b</heading>' );
 
 			return editor.destroy()

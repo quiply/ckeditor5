@@ -5,12 +5,12 @@ category: features
 
 {@snippet features/build-link-source}
 
-The {@link module:link/link~Link} feature brings support for link editing to the rich-text editor. It allows for inserting hyperlinks into the edited content and offers the UI to create and edit them.
+The link feature brings support for link editing to the rich-text editor. It allows for inserting hyperlinks into the edited content and offers the UI to create and edit them.
 
 Thanks to the [autolink](#autolink-feature) plugin, typed or pasted URLs and e-mail addresses will be automatically turned into working links as you type.
 
 <info-box info>
-	This feature is enabled by default in all {@link installation/advanced/predefined-builds predefined builds}.
+	This feature is enabled by default in all {@link installation/getting-started/predefined-builds predefined builds}.
 </info-box>
 
 ## Demo
@@ -18,6 +18,10 @@ Thanks to the [autolink](#autolink-feature) plugin, typed or pasted URLs and e-m
 Use the Link toolbar button {@icon @ckeditor/ckeditor5-link/theme/icons/link.svg Link} or press <kbd>Ctrl</kbd>/<kbd>Cmd</kbd>+<kbd>K</kbd> to create a new link. Clicking on a link will activate the contextual toolbar, from which you can edit existing links {@icon @ckeditor/ckeditor5-core/theme/icons/pencil.svg Edit link} or unlink them {@icon @ckeditor/ckeditor5-link/theme/icons/unlink.svg Unlink} with a click.
 
 {@snippet features/link}
+
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
 
 ## Typing around links
 
@@ -27,13 +31,13 @@ CKEditor 5 allows for typing both at inner and outer boundaries of links to make
 
 {@img assets/img/typing-inside.gif 770 The animation showing typing inside the link in CKEditor 5 rich text editor.}
 
-**To type before or after a link**, move the caret to its boundary, then press the Arrow key (<kbd>→</kbd> or <kbd>←</kbd>) once. The link is no longer highlighted and whatever text you type or formatting you apply will not be enclosed by the link:
+**To type before or after a link**, move the caret to its boundary, then press the Arrow key (<kbd>←</kbd> or <kbd>→</kbd>) away from the link once. The link is no longer highlighted and whatever text you type or formatting you apply will not be enclosed by the link:
 
 {@img assets/img/typing-before.gif 770 The animation showing typing before the link in CKEditor 5 rich text editor.}
 
 ## Custom link attributes (decorators)
 
-By default, all links created in the editor have the `href="..."` attribute in the {@link installation/getting-started/basic-api#getting-the-editor-data editor data}. If you want your links to have additional link attributes, {@link module:link/link~LinkConfig#decorators link decorators} provide an easy way to configure and manage them.
+By default, all links created in the editor have the `href="..."` attribute in the {@link installation/getting-started/getting-and-setting-data#getting-the-editor-data-with-getdata editor data}. If you want your links to have additional link attributes, {@link module:link/link~LinkConfig#decorators link decorators} provide an easy way to configure and manage them.
 
 There are two types of link decorators you can use:
 
@@ -57,8 +61,9 @@ ClassicEditor
 	.create( document.querySelector( '#editor' ), {
 		toolbar: {
 			items: [
+				'link',
+				// More toolbar items. 
 				// ...
-				'link'
 			],
 		},
 		link: {
@@ -77,8 +82,8 @@ ClassicEditor
 			]
 		}
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 ### Configuration
@@ -98,13 +103,14 @@ A very common use case for (automatic) link decorators is adding `target="_blank
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			addTargetToExternalLinks: true
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 Internally, this configuration corresponds to an [automatic decorator](#adding-attributes-to-links-based-on-predefined-rules-automatic-decorators) with the following {@link module:link/link~LinkDecoratorAutomaticDefinition definition}:
@@ -112,7 +118,6 @@ Internally, this configuration corresponds to an [automatic decorator](#adding-a
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			decorators: {
 				addTargetToExternalLinks: {
@@ -125,9 +130,11 @@ ClassicEditor
 				}
 			}
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 If you want to leave the decision whether a link should open in a new tab to the users, do not use the `config.link.addTargetToExternalLinks` configuration but define a new [manual decorator](#adding-attributes-to-links-using-the-ui-manual-decorators) with the following definition instead:
@@ -135,7 +142,6 @@ If you want to leave the decision whether a link should open in a new tab to the
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			decorators: {
 				openInNewTab: {
@@ -148,9 +154,11 @@ ClassicEditor
 				}
 			}
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 #### Adding default link protocol to external links
@@ -164,13 +172,14 @@ See a basic configuration example:
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			defaultProtocol: 'http://'
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box>
@@ -188,7 +197,6 @@ For instance, to create an automatic decorator that adds the `download="file.pdf
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			decorators: {
 				detectDownloadable: {
@@ -200,9 +208,11 @@ ClassicEditor
 				}
 			}
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box>
@@ -218,7 +228,6 @@ To configure a "Downloadable" switch button in the link editing balloon that add
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		// ...
 		link: {
 			decorators: {
 				toggleDownloadable: {
@@ -239,9 +248,11 @@ ClassicEditor
 				}
 			}
 		}
+		// More of editor's config.
+ 		// ...
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 ## Autolink feature
@@ -276,15 +287,15 @@ import AutoLink from '@ckeditor/ckeditor5-link/src/autolink';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ Link, AutoLink, ... ],
-		toolbar: [ 'link', ... ],
+		plugins: [ Link, AutoLink, /* ... */ ],
+		toolbar: [ 'link', /* ... */ ],
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box info>
-	Read more about {@link installation/getting-started/installing-plugins installing plugins}.
+	Read more about {@link installation/plugins/installing-plugins installing plugins}.
 </info-box>
 
 ## Common API
@@ -318,4 +329,4 @@ Links are represented in the {@link module:engine/model/model~Model model} using
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link).

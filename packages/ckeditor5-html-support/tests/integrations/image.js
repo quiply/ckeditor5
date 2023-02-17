@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -41,6 +41,10 @@ describe( 'ImageElementSupport', () => {
 		editorElement.remove();
 
 		return editor.destroy();
+	} );
+
+	it( 'should be named', () => {
+		expect( editor.plugins.has( 'ImageElementSupport' ) ).to.be.true;
 	} );
 
 	describe( 'BlockImage', () => {
@@ -311,6 +315,36 @@ describe( 'ImageElementSupport', () => {
 			expect( editor.getData() ).to.equal(
 				'<figure class="image"><img src="/assets/sample.png"></figure>'
 			);
+		} );
+
+		it( 'should create a marker before GHS converts attributes and convert custom attributes after', () => {
+			dataFilter.loadAllowedConfig( [ {
+				name: /.*/,
+				attributes: true,
+				styles: true,
+				classes: true
+			} ] );
+
+			editor.conversion.for( 'upcast' ).dataToMarker( {
+				view: 'commented'
+			} );
+
+			editor.setData(
+				'<figure class="image" data-commented-end-after="foo:id" data-commented-start-before="foo:id" foo="bar">' +
+					'<img src="/assets/sample.png" data-foo="foo">' +
+                '</figure>'
+			);
+
+			expect( editor.getData() ).to.deep.equal(
+				'<figure class="image" foo="bar">' +
+					'<img src="/assets/sample.png" data-foo="foo">' +
+                '</figure>'
+			);
+
+			const marker = model.markers.get( 'commented:foo:id' );
+
+			expect( marker.getStart().path ).to.deep.equal( [ 0 ] );
+			expect( marker.getEnd().path ).to.deep.equal( [ 1 ] );
 		} );
 
 		// it( 'should allow modifying styles, classes and attributes', () => {
@@ -827,6 +861,43 @@ describe( 'ImageElementSupport', () => {
 			expect( editor.getData() ).to.equal( expectedHtml );
 		} );
 
+		it( 'should create a marker before GHS converts attributes', () => {
+			dataFilter.loadAllowedConfig( [ {
+				name: /.*/,
+				attributes: true,
+				styles: true,
+				classes: true
+			} ] );
+
+			editor.conversion.for( 'upcast' ).dataToMarker( {
+				view: 'commented'
+			} );
+
+			editor.setData(
+				'<figure class="image" data-commented-end-after="foo:id" data-commented-start-before="foo:id">' +
+					'<a href="www.example.com">' +
+						'<img src="/assets/sample.png">' +
+					'</a>' +
+				'</figure>'
+			);
+
+			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
+				data: '<imageBlock htmlLinkAttributes="(1)" src="/assets/sample.png"></imageBlock>',
+				attributes: {
+					1: {
+						attributes: {
+							href: 'www.example.com'
+						}
+					}
+				}
+			} );
+
+			const marker = model.markers.get( 'commented:foo:id' );
+
+			expect( marker.getStart().path ).to.deep.equal( [ 0 ] );
+			expect( marker.getEnd().path ).to.deep.equal( [ 1 ] );
+		} );
+
 		// it( 'should allow modifying styles, classes and attributes', () => {
 		// 	// This should also work when we set `attributes: true` but currently there are some
 		// 	// problems related to GHS picking up non-GHS attributes (like src) due to some attributes not
@@ -1324,6 +1395,43 @@ describe( 'ImageElementSupport', () => {
 			/* eslint-enable max-len */
 		} );
 
+		it( 'should create a marker before GHS converts attributes', () => {
+			dataFilter.loadAllowedConfig( [ {
+				name: /.*/,
+				attributes: true,
+				styles: true,
+				classes: true
+			} ] );
+
+			editor.conversion.for( 'upcast' ).dataToMarker( {
+				view: 'commented'
+			} );
+
+			editor.setData(
+				'<figure class="image" data-commented-end-after="foo:id" data-commented-start-before="foo:id">' +
+					'<img src="/assets/sample.png">' +
+					'<figcaption>A caption</figcaption>' +
+				'</figure>'
+			);
+
+			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
+				data: '<imageBlock src="/assets/sample.png"><caption>A caption</caption></imageBlock>',
+				attributes: {}
+			} );
+
+			expect( editor.getData() ).to.equal(
+				'<figure class="image">' +
+						'<img src="/assets/sample.png">' +
+						'<figcaption>A caption</figcaption>' +
+				'</figure>'
+			);
+
+			const marker = model.markers.get( 'commented:foo:id' );
+
+			expect( marker.getStart().path ).to.deep.equal( [ 0 ] );
+			expect( marker.getEnd().path ).to.deep.equal( [ 1 ] );
+		} );
+
 		// it( 'should allow modifying styles, classes and attributes', () => {
 		// 	// This should also work when we set `attributes: true` but currently there are some
 		// 	// problems related to GHS picking up non-GHS attributes (like src) due to some attributes not
@@ -1708,6 +1816,37 @@ describe( 'ImageElementSupport', () => {
 			expect( editor.getData() ).to.equal( '' );
 		} );
 
+		it( 'should create a marker before GHS converts attributes', () => {
+			dataFilter.loadAllowedConfig( [ {
+				name: /.*/,
+				attributes: true,
+				styles: true,
+				classes: true
+			} ] );
+
+			editor.conversion.for( 'upcast' ).dataToMarker( {
+				view: 'commented'
+			} );
+
+			editor.setData(
+				'<p><img data-commented-end-after="foo:id" data-commented-start-before="foo:id" src="/assets/sample.png"></p>'
+			);
+
+			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
+				data: '<paragraph><imageInline src="/assets/sample.png"></imageInline></paragraph>',
+				attributes: {}
+			} );
+
+			expect( editor.getData() ).to.equal(
+				'<p><img src="/assets/sample.png"></p>'
+			);
+
+			const marker = model.markers.get( 'commented:foo:id' );
+
+			expect( marker.getStart().path ).to.deep.equal( [ 0, 0 ] );
+			expect( marker.getEnd().path ).to.deep.equal( [ 0, 1 ] );
+		} );
+
 		// it( 'should allow modifying styles, classes and attributes', () => {
 		// 	dataFilter.loadAllowedConfig( [ {
 		// 		name: /^(img|p)$/,
@@ -1955,10 +2094,8 @@ describe( 'ImageElementSupport', () => {
 			);
 
 			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
-				data: '<paragraph><imageInline htmlA="(1)" linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
-				attributes: {
-					1: {}
-				}
+				data: '<paragraph><imageInline linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
+				attributes: {}
 			} );
 
 			expect( editor.getData() ).to.equal(
@@ -1982,10 +2119,8 @@ describe( 'ImageElementSupport', () => {
 			);
 
 			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
-				data: '<paragraph><imageInline htmlA="(1)" linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
-				attributes: {
-					1: {}
-				}
+				data: '<paragraph><imageInline linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
+				attributes: {}
 			} );
 
 			expect( editor.getData() ).to.equal(
@@ -2013,10 +2148,8 @@ describe( 'ImageElementSupport', () => {
 			);
 
 			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
-				data: '<paragraph><imageInline htmlA="(1)" linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
-				attributes: {
-					1: {}
-				}
+				data: '<paragraph><imageInline linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
+				attributes: {}
 			} );
 
 			expect( editor.getData() ).to.equal(
@@ -2049,6 +2182,41 @@ describe( 'ImageElementSupport', () => {
 			expect( editor.getData() ).to.equal(
 				'<p><a href="www.example.com"><img src="/assets/sample.png"></a></p>'
 			);
+		} );
+
+		it( 'should create a marker before GHS converts attributes', () => {
+			dataFilter.loadAllowedConfig( [ {
+				name: /.*/,
+				attributes: true,
+				styles: true,
+				classes: true
+			} ] );
+
+			editor.conversion.for( 'upcast' ).dataToMarker( {
+				view: 'commented'
+			} );
+
+			editor.setData(
+				'<p>' +
+					'<a href="www.example.com">' +
+						'<img src="/assets/sample.png" data-commented-end-after="foo:id" data-commented-start-before="foo:id">' +
+					'</a>' +
+				'</p>'
+			);
+
+			expect( getModelDataWithAttributes( model, { withoutSelection: true } ) ).to.deep.equal( {
+				data: '<paragraph><imageInline linkHref="www.example.com" src="/assets/sample.png"></imageInline></paragraph>',
+				attributes: { }
+			} );
+
+			expect( editor.getData() ).to.equal(
+				'<p><a href="www.example.com"><img src="/assets/sample.png"></a></p>'
+			);
+
+			const marker = model.markers.get( 'commented:foo:id' );
+
+			expect( marker.getStart().path ).to.deep.equal( [ 0, 0 ] );
+			expect( marker.getEnd().path ).to.deep.equal( [ 0, 1 ] );
 		} );
 
 		// it( 'should allow modifying styles, classes and attributes', () => {
@@ -2227,6 +2395,9 @@ describe( 'ImageElementSupport', () => {
 						name: /^(img)$/
 					} ] );
 
+					// Apply filtering rules added after initial data load.
+					editor.setData( '' );
+
 					expect( schema.getDefinition( 'imageBlock' ).allowAttributes ).to.deep.equal( [
 						'alt',
 						'src',
@@ -2259,6 +2430,9 @@ describe( 'ImageElementSupport', () => {
 						name: /^(img)$/
 					} ] );
 
+					// Apply filtering rules added after initial data load.
+					editor.setData( '' );
+
 					expect( schema.getDefinition( 'imageInline' ).allowAttributes ).to.deep.equal( [
 						'alt',
 						'src',
@@ -2288,6 +2462,9 @@ describe( 'ImageElementSupport', () => {
 					dataFilter.loadAllowedConfig( [ {
 						name: /^(img)$/
 					} ] );
+
+					// Apply filtering rules added after initial data load.
+					editor.setData( '' );
 
 					expect( schema.getDefinition( 'imageBlock' ).allowAttributes ).to.deep.equal( [
 						'htmlAttributes'

@@ -3,7 +3,7 @@ title: Autoformatting
 category: features
 ---
 
-The {@link module:autoformat/autoformat~Autoformat} feature allows you to quickly apply formatting to the content you are writing with the use of shortcodes.
+The autoformat feature allows you to quickly apply formatting to the content you are writing with the use of shortcodes.
 
 Employ Markdown-like inline codes as you type for a faster and more efficient editing workflow. Speed up and simplify the process by skipping the need to use toolbar buttons and dropdowns for the most common formatting features with these easy to memorize options listed below.
 
@@ -12,7 +12,7 @@ Coupled with the {@link features/markdown Markdown output} feature, the autoform
 If needed, the automattic change can be reverted simply by pressing <kbd>Backspace</kbd>.
 
 <info-box info>
-	This feature is enabled by default in all {@link installation/advanced/predefined-builds predefined builds}.
+	This feature is enabled by default in all {@link installation/getting-started/predefined-builds predefined builds}.
 </info-box>
 
 ## Block formatting
@@ -46,6 +46,10 @@ Use the editor provided below to test the autoformatting feature. Try using Mark
 
 {@snippet features/autoformat}
 
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
+
 ## Related features
 
 In addition to enabling automatic text formatting, you may want to check the following productivity features:
@@ -75,11 +79,11 @@ import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ Autoformat, ... ],
-		toolbar: [ ... ]
+		plugins: [ Autoformat, /* ... */ ],
+		toolbar: [ /* ... */ ]
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box hint>
@@ -87,7 +91,7 @@ ClassicEditor
 </info-box>
 
 <info-box info>
-	Read more about {@link installation/getting-started/installing-plugins installing plugins}.
+	Read more about {@link installation/plugins/installing-plugins installing plugins}.
 </info-box>
 
 ## Creating custom autoformatters
@@ -104,4 +108,4 @@ While the autoformatting feature is stable and ready to use, some issues were re
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-autoformat.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-autoformat](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-autoformat).

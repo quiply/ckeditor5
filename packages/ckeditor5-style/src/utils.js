@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -36,14 +36,21 @@ export function normalizeConfig( dataSchema, styleDefinitions = [] ) {
 	};
 
 	for ( const definition of styleDefinitions ) {
-		const matchingDefinitions = Array.from( dataSchema.getDefinitionsForView( definition.element ) );
-		const modelElements = matchingDefinitions.map( ( { model } ) => model );
-		const isBlock = matchingDefinitions.some( ( { isBlock } ) => isBlock );
+		const modelElements = [];
+		const ghsAttributes = [];
 
-		if ( isBlock ) {
-			normalizedDefinitions.block.push( { isBlock, modelElements, ...definition } );
+		for ( const ghsDefinition of dataSchema.getDefinitionsForView( definition.element ) ) {
+			if ( ghsDefinition.isBlock ) {
+				modelElements.push( ghsDefinition.model );
+			} else {
+				ghsAttributes.push( ghsDefinition.model );
+			}
+		}
+
+		if ( modelElements.length ) {
+			normalizedDefinitions.block.push( { ...definition, modelElements, isBlock: true } );
 		} else {
-			normalizedDefinitions.inline.push( { isBlock, modelElements, ...definition } );
+			normalizedDefinitions.inline.push( { ...definition, ghsAttributes } );
 		}
 	}
 	return normalizedDefinitions;

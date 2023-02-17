@@ -1,7 +1,7 @@
 ---
 category: framework-contributing
 order: 30
-modified_at: 2021-10-25
+modified_at: 2022-11-03
 ---
 
 # Code style
@@ -36,7 +36,8 @@ No whitespace for an **empty parenthesis**:
 
 ```js
 const a = () => {
-	// Statements...
+	// Statements.
+	// ...
 };
 
 a();
@@ -50,7 +51,8 @@ let a, b;
 a( 1, 2, 3 );
 
 for ( const i = 0; i < 100; i++ ) {
-	// Statements...
+	// Statements.
+	// ...
 }
 ```
 
@@ -65,7 +67,8 @@ class Bar {
 	a() {
 		while ( b in a ) {
 			if ( b == c ) {
-				// Statements...
+				// Statements.
+				// ...
 			}
 		}
 	}
@@ -80,7 +83,8 @@ if (
 	condition || with &&
 	( multiple == lines )
 ) {
-	// Statements...
+	// Statements.
+	// ...
 }
 
 while (
@@ -88,7 +92,8 @@ while (
 	condition || with &&
 	( multiple == lines )
 ) {
-	// Statements...
+	// Statements.
+	// ...
 }
 ```
 
@@ -104,21 +109,27 @@ Braces **start at the same line** as the head statement and end aligned with it:
 
 ```js
 function a() {
-	// Statements...
+	// Statements.
+	// ...
 }
 
 if ( a ) {
-	// Statements...
+	// Statements.
+	// ...
 } else if ( b ) {
-	// Statements...
+	// Statements.
+	// ...
 } else {
-	// Statements...
+	// Statements.
+	// ...
 }
 
 try {
-	// Statements...
+	// Statements.
+	// ...
 } catch ( e ) {
-	// Statements...
+	// Statements.
+	// ...
 }
 ```
 
@@ -205,7 +216,7 @@ Whenever there is a multi-line function call:
 
 * Put the first parameter in a new line.
 * Put every parameter in a separate line indented by one tab.
-* Put the last closing parenthesis in a new line, at the same indendation level as the beginning of the call.
+* Put the last closing parenthesis in a new line, at the same indentation level as the beginning of the call.
 
 Examples:
 
@@ -218,7 +229,8 @@ const myObj = new MyClass(
 
 fooBar(
 	() => {
-		// Statements...
+		// Statements.
+		// ...
 	}
 );
 
@@ -233,9 +245,8 @@ fooBar(
 fooBar(
 	'A very long string',
 	() => {
-		// ... some kind
-		// ... of a
-		// ... callback
+		// Some kind of a callback.
+		// ...
 	},
 	5,
 	new MyClass(
@@ -306,7 +317,8 @@ const html =
  * @returns {Object} Something.
  */
 someMethod() {
-	// Statements...
+	// Statements.
+	// ...
 }
 ```
 
@@ -446,7 +458,9 @@ You can use ES6 getters to simplify class API:
 
 ```js
 class Position {
+	// More methods.
 	// ...
+	
 	get offset() {
 		return this.path[ this.path.length - 1 ];
 	}
@@ -488,9 +502,10 @@ There are some special rules and tips for tests.
 	```js
 	describe( 'Editor', () => {
 		describe( 'constructor()', () => {
-			it( ... );
+			it( /* ... */ );
 		} );
 
+		// More test cases.
 		// ...
 	} );
 	```
@@ -552,8 +567,8 @@ Mixins must be named in [UpperCamelCase](http://en.wikipedia.org/wiki/CamelCase)
 
 ```js
 const SomeMixin = {
-	method1: ...,
-	method2: ...
+	method1: /* ... */,
+	method2: /* ... */
 };
 ```
 
@@ -944,3 +959,47 @@ import toArray from '@ckeditor/ckeditor5-utils/src/toarray';
 ```
 
 [History of the change.](https://github.com/ckeditor/ckeditor5/issues/9318)
+
+### Importing modules in debug comments: `ckeditor5-rules/use-require-for-debug-mode-imports`
+
+The debug mode allows importing additional modules for testing purposes. Unfortunately, the debug comment is not removed, so webpack reports the following error.
+
+```
+Module parse failed: 'import' and 'export' may only appear at the top level (15204:20)
+File was processed with these loaders:
+ * ./node_modules/@ckeditor/ckeditor5-dev-tests/lib/utils/ck-debug-loader.js
+You may need an additional loader to handle the result of these loaders.
+|  */
+|
+> /* @if CK_DEBUG */  import { CKEditorError } from 'ckeditor5/src/utils';
+|
+| /**
+```
+
+Modules need to be imported with a `require()` function.
+
+To create a code executed only in the debug mode, follow the description of the `--debug` flag in the {@link framework/guides/contributing/testing-environment#running-manual-tests testing environment} guide.
+
+👎&nbsp; Examples of incorrect code for this rule:
+
+```js
+// @if CK_DEBUG // import defaultExport from 'module-name';
+// @if CK_DEBUG // import * as name from 'module-name';
+// @if CK_DEBUG // import { testFunction } from 'module-name';
+// @if CK_DEBUG // import { default as alias } from 'module-name';
+// @if CK_DEBUG // import { exported as alias } from 'module-name';
+// @if CK_DEBUG // import 'module-name';
+```
+
+👍&nbsp; Examples of correct code for this rule:
+
+```js
+// @if CK_DEBUG // const defaultExport = require( 'module-name' ).default;
+// @if CK_DEBUG // const name = require( 'module-name' );
+// @if CK_DEBUG // const { testFunction } = require( 'module-name' );
+// @if CK_DEBUG // const alias = require( 'module-name' ).default;
+// @if CK_DEBUG // const { exported: alias } = require( 'module-name' );
+// @if CK_DEBUG // require( 'module-name' );
+```
+
+[History of the change.](https://github.com/ckeditor/ckeditor5/issues/12479)

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -384,6 +384,26 @@ describe( 'Model', () => {
 			} );
 		} );
 
+		it( 'should fire `_beforeChanges` and `_afterChanges` events', () => {
+			model.on( '_beforeChanges', () => {
+				changes += 'A';
+			} );
+
+			model.on( '_afterChanges', () => {
+				changes += 'D';
+			} );
+
+			model.change( () => {
+				changes += 'B';
+
+				model.enqueueChange( () => {
+					changes += 'C';
+				} );
+			} );
+
+			expect( changes ).to.equal( 'ABCD' );
+		} );
+
 		it( 'should rethrow native errors as they are in the dubug=true mode in the model.change() block', () => {
 			const error = new TypeError( 'foo' );
 
@@ -422,6 +442,40 @@ describe( 'Model', () => {
 					throw err;
 				} );
 			}, /foo/, null, { foo: 1 } );
+		} );
+
+		it( 'should not keep failed change pending', () => {
+			expect( () => {
+				model.change( () => {
+					changes += 'A';
+
+					throw new Error();
+				} );
+			} ).to.throw();
+
+			expect( () => {
+				model.enqueueChange( () => {
+					changes += 'B';
+				} );
+			} ).to.not.throw();
+
+			expect( changes ).to.equal( 'AB' );
+		} );
+
+		it( 'should fire `_afterChanges` after failed change', () => {
+			model.on( '_afterChanges', () => {
+				changes += 'B';
+			} );
+
+			expect( () => {
+				model.change( () => {
+					changes += 'A';
+
+					throw new Error();
+				} );
+			} ).to.throw();
+
+			expect( changes ).to.equal( 'AB' );
 		} );
 	} );
 

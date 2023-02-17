@@ -7,16 +7,16 @@ Update git:
 
 1) cd packages/ckeditor5-build-classic
 2) git fetch upstream
-3) "git merge upstream/stable" or "git rebase upstream/stable"
+3) "git merge upstream/stable" (or "git rebase upstream/stable")
 4) -> conflicts: ignore conflicts in build directory (build/ckeditor.js and build/translations/*)
 5) -> update versions in ckeditor5-build-classic/package.json and(!) in ckeditor5-emojis/package.json  
-
-6) recommend: rm -rf node_modules && yarn install
+6) rm -rf node_modules && yarn install
+7) remove yarn.lock
            
 Build new ckeditor version:
 ===
 
-first time:
+first time or after an update to a new version:
 1) cd packages/ckeditor5-build-classic
 2) yarn install
 3) yarn add --dev @ckeditor/ckeditor5-editor-inline
@@ -25,7 +25,6 @@ first time:
 if has already run once:         
 1) cd packages/ckeditor5-build-classic
 2) yarn run build
-
 
 -> check new build, open sample/index.html
 -> copy packages/ckeditor5-build-classic/build/ckeditor.js, ckeditor.js.map and translations (de.js etc.) in Quiply project

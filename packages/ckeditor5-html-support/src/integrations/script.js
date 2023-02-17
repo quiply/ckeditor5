@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -28,6 +28,13 @@ export default class ScriptElementSupport extends Plugin {
 	 */
 	static get requires() {
 		return [ DataFilter ];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	static get pluginName() {
+		return 'ScriptElementSupport';
 	}
 
 	/**

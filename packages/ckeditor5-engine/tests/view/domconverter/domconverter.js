@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -836,7 +836,7 @@ describe( 'DomConverter', () => {
 			const viewElement = writer.createContainerElement( 'p', {}, { renderUnsafeAttributes: [ 'onclick' ] } );
 			viewElement.getFillerOffset = () => null;
 
-			const domElement = converter.viewToDom( viewElement, document );
+			const domElement = converter.viewToDom( viewElement );
 
 			converter.setDomElementAttribute( domElement, 'onclick', 'bar', viewElement );
 

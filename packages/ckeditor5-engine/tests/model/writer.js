@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -1528,8 +1528,8 @@ describe( 'Writer', () => {
 
 				const history = model.document.history;
 
-				const lastOperation = history._operations[ history._operations.length - 1 ];
-				const secondLastOperation = history._operations[ history._operations.length - 2 ];
+				const lastOperation = history.lastOperation;
+				const secondLastOperation = history.getOperation( history.version - 2 );
 
 				expect( secondLastOperation.type ).to.equal( 'marker' );
 				expect( secondLastOperation.oldRange.isEqual( markerRange ) );
@@ -1554,7 +1554,7 @@ describe( 'Writer', () => {
 
 			const history = model.document.history;
 
-			const lastOperation = history._operations[ history._operations.length - 1 ];
+			const lastOperation = history.lastOperation;
 
 			expect( lastOperation.type ).to.equal( 'merge' );
 			expect( model.document.version ).to.equal( documentVersion + 1 );
@@ -1619,8 +1619,8 @@ describe( 'Writer', () => {
 
 			const history = model.document.history;
 
-			const lastOperation = history._operations[ history._operations.length - 1 ];
-			const secondLastOperation = history._operations[ history._operations.length - 2 ];
+			const lastOperation = history.lastOperation;
+			const secondLastOperation = history.getOperation( history.version - 2 );
 
 			expect( secondLastOperation.type ).to.equal( 'marker' );
 			expect( secondLastOperation.oldRange.isEqual( markerRange ) );
@@ -1644,7 +1644,7 @@ describe( 'Writer', () => {
 
 			const history = model.document.history;
 
-			const lastOperation = history._operations[ history._operations.length - 1 ];
+			const lastOperation = history.lastOperation;
 
 			expect( lastOperation.type ).to.equal( 'move' );
 			expect( model.document.version ).to.equal( documentVersion + 1 );
@@ -1761,8 +1761,8 @@ describe( 'Writer', () => {
 
 				const history = model.document.history;
 
-				const lastOperation = history._operations[ history._operations.length - 1 ];
-				const secondLastOperation = history._operations[ history._operations.length - 2 ];
+				const lastOperation = history.lastOperation;
+				const secondLastOperation = history.getOperation( history.version - 2 );
 
 				expect( secondLastOperation.type ).to.equal( 'marker' );
 				expect( secondLastOperation.oldRange.isEqual( markerRange ) );
@@ -1787,7 +1787,7 @@ describe( 'Writer', () => {
 
 				const history = model.document.history;
 
-				const lastOperation = history._operations[ history._operations.length - 1 ];
+				const lastOperation = history.lastOperation;
 
 				expect( lastOperation.type ).to.equal( 'remove' );
 				expect( model.document.version ).to.equal( documentVersion + 1 );

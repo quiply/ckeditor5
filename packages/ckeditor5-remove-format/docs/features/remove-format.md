@@ -6,15 +6,23 @@ category: features
 
 {@snippet features/build-remove-format-source}
 
-The {@link module:remove-format/removeformat~RemoveFormat `Remove format`} feature allows you to quickly remove any text formatting applied using inline HTML elements and CSS styles, like {@link features/basic-styles basic text styles} (bold, italic, etc.), {@link features/font font family, size, and color} and similar.
+The remove format feature allows you to quickly remove any text formatting applied using inline HTML elements and CSS styles, like {@link features/basic-styles basic text styles} (bold, italic, etc.), {@link features/font font family, size, and color} and similar.
 
 Note that block-level formatting ({@link features/headings headings}, {@link features/images-overview images}) and semantic data ({@link features/link links}) will not be removed by this feature.
+
+<info-box info>
+	The Remove formatting feature is enabled by default in the {@link installation/getting-started/predefined-builds#superbuild superbuild} only. See the [installation](#installation) section to learn how to enable it in your editor.
+</info-box>
 
 ## Demo
 
 Select the content you want to clean up and press the remove format button {@icon @ckeditor/ckeditor5-remove-format/theme/icons/remove-format.svg remove format} in the toolbar:
 
 {@snippet features/remove-format}
+
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
 
 ## Related features
 
@@ -53,14 +61,16 @@ Enable the `RemoveFormatLinks` plugin in the {@link installation/getting-started
 
 ```js
 ClassicEditor
-	.create( ..., {
+	.create( document.querySelector( '#editor' ), {
 		plugins: [
 			RemoveFormat,
 			RemoveFormatLinks,
+			// More plugins.
 			// ...
 		],
 		toolbar: [
 			'removeFormat',
+			// More toolbar items.
 			// ...
 		]
 	} )
@@ -83,15 +93,15 @@ import RemoveFormat from '@ckeditor/ckeditor5-remove-format/src/removeformat';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		plugins: [ RemoveFormat, ... ],
-		toolbar: [ 'removeFormat', ... ]
+		plugins: [ RemoveFormat, /* ... */ ],
+		toolbar: [ 'removeFormat', /* ... */ ]
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box info>
-	Read more about {@link installation/getting-started/installing-plugins installing plugins}.
+	Read more about {@link installation/plugins/installing-plugins installing plugins}.
 </info-box>
 
 ## Common API
@@ -111,4 +121,4 @@ editor.execute( 'removeFormat' );
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-remove-format.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-remove-format](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-remove-format).

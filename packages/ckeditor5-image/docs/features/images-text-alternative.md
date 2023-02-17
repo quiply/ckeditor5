@@ -32,9 +32,13 @@ You can see the demo of a WYSIWYG editor with the base image feature enabled bel
 
 {@snippet features/image-text-alternative}
 
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
+
 ## Installation
 
-This feature is available in all {@link installation/advanced/predefined-builds ready-to-use editor builds}. If your integrations uses a custom editor build, check out the {@link features/images-installation image features installation guide} to learn how to enable this feature.
+This feature is available in all {@link installation/getting-started/predefined-builds ready-to-use editor builds}. If your integrations uses a custom editor build, check out the {@link features/images-installation image features installation guide} to learn how to enable this feature.
 
 ## Common API
 
@@ -49,4 +53,4 @@ The {@link module:image/imagetextalternative~ImageTextAlternative} plugin regist
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image).

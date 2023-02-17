@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -1386,6 +1386,71 @@ describe( 'CodeBlockEditing', () => {
 
 			await editor.destroy();
 			element.remove();
+		} );
+
+		it( 'should upcast <pre> with single space around <code>', () => {
+			editor.setData( '<pre> <code>Hello World!</code> </pre>' );
+
+			expect( getModelData( model ) ).to.equal( '<codeBlock language="plaintext">[]Hello World!</codeBlock>' );
+		} );
+
+		it( 'should upcast <pre> with multiple spaces around <code>', () => {
+			editor.setData( '<pre>    <code>Hello World!</code>    </pre>' );
+
+			expect( getModelData( model ) ).to.equal( '<codeBlock language="plaintext">[]Hello World!</codeBlock>' );
+		} );
+
+		it( 'should upcast <pre> with tabs around <code>', () => {
+			editor.setData( '<pre>		<code>Hello World!</code>		</pre>' );
+
+			expect( getModelData( model ) ).to.equal( '<codeBlock language="plaintext">[]Hello World!</codeBlock>' );
+		} );
+
+		it( 'should upcast <pre> with line breaks around <code>', () => {
+			editor.setData( `<pre>
+				<code>Hello World!</code>
+			</pre>` );
+
+			expect( getModelData( model ) ).to.equal( '<codeBlock language="plaintext">[]Hello World!</codeBlock>' );
+		} );
+
+		it( 'should upcast <pre> with accidental text around <code>', () => {
+			editor.setData( '<pre>foo<code>Hello World!</code>bar</pre>' );
+
+			expect( getModelData( model ) ).to.equal( '<codeBlock language="plaintext">[]Hello World!</codeBlock>' );
+		} );
+
+		it( 'should upcast <pre> with accidental elements around <code>', () => {
+			editor.setData( '<pre><b>foo</b><code>Hello World!</code><span>bar</span></pre>' );
+
+			expect( getModelData( model ) ).to.equal(
+				'<paragraph><$text bold="true">[]foo</$text></paragraph>' +
+				'<codeBlock language="plaintext">Hello World!</codeBlock>' +
+				'<paragraph>bar</paragraph>'
+			);
+		} );
+
+		it( 'should upcast <pre> with nested <pre> and accidental elements around <code>', () => {
+			editor.setData(
+				'<pre>' +
+					'<b>foo</b>' +
+					'<code>' +
+						'Hello World!' +
+						'<pre>' +
+							'<b>Nested-bold</b>' +
+							'<code>Nested code</code>' +
+							'<span>Nested-span</span>' +
+						'</pre>' +
+					'</code>' +
+					'<span>bar</span>' +
+				'</pre>'
+			);
+
+			expect( getModelData( model ) ).to.equal(
+				'<paragraph><$text bold="true">[]foo</$text></paragraph>' +
+				'<codeBlock language="plaintext">Hello World!Nested-boldNested codeNested-span</codeBlock>' +
+				'<paragraph>bar</paragraph>'
+			);
 		} );
 
 		describe( 'config.codeBlock.languages', () => {

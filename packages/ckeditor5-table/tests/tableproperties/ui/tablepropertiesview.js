@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -169,6 +169,7 @@ describe( 'table properties', () => {
 						} );
 
 						it( 'should change #borderStyle when executed', () => {
+							labeledDropdown.fieldView.isOpen = true;
 							labeledDropdown.fieldView.listView.items.first.children.first.fire( 'execute' );
 							expect( view.borderStyle ).to.equal( 'none' );
 
@@ -177,6 +178,8 @@ describe( 'table properties', () => {
 						} );
 
 						it( 'should come with a set of pre–defined border styles', () => {
+							labeledDropdown.fieldView.isOpen = true;
+
 							expect( labeledDropdown.fieldView.listView.items.map( item => {
 								return item.children.first.label;
 							} ) ).to.have.ordered.members( [
@@ -616,8 +619,10 @@ describe( 'table properties', () => {
 				expect( view._focusables.map( f => f ) ).to.have.members( [
 					view.borderStyleDropdown,
 					view.borderColorInput,
+					view.borderColorInput.fieldView.dropdownView.buttonView,
 					view.borderWidthInput,
 					view.backgroundInput,
+					view.backgroundInput.fieldView.dropdownView.buttonView,
 					view.widthInput,
 					view.heightInput,
 					view.alignmentToolbar,
@@ -810,7 +815,7 @@ describe( 'table properties', () => {
 
 						it( 'should replace "Remove color" with the "Restore default" label', () => {
 							const { borderColorInput } = view;
-							const { panelView } = borderColorInput.fieldView._dropdownView;
+							const { panelView } = borderColorInput.fieldView.dropdownView;
 
 							expect( panelView.children.first.label ).to.equal( 'Restore default' );
 						} );
@@ -820,7 +825,7 @@ describe( 'table properties', () => {
 				describe( 'background row', () => {
 					it( 'should replace "Remove color" with the "Restore default" label', () => {
 						const { backgroundInput } = view;
-						const { panelView } = backgroundInput.fieldView._dropdownView;
+						const { panelView } = backgroundInput.fieldView.dropdownView;
 
 						expect( panelView.children.first.label ).to.equal( 'Restore default' );
 					} );

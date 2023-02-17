@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -514,6 +514,56 @@ describe( 'DocumentListStyleCommand', () => {
 			expect( getData( model ) ).to.equalMarkup( modelList( `
 				Foo.[]
 			` ) );
+		} );
+	} );
+
+	describe( 'isStyleTypeSupported()', () => {
+		it( 'should return `true` for all styles provided in constructor', () => {
+			const editor = new Editor();
+			const listStyleCommand = new DocumentListStyleCommand( editor, 'default', [
+				'circle',
+				'decimal',
+				'upper-roman'
+			] );
+
+			expect( listStyleCommand.isStyleTypeSupported( 'circle' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'decimal' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-roman' ) ).to.be.true;
+		} );
+
+		it( 'should return `false` for styles not provided in constructor', () => {
+			const editor = new Editor();
+			const listStyleCommand = new DocumentListStyleCommand( editor, 'default', [
+				'circle',
+				'decimal',
+				'upper-roman'
+			] );
+
+			expect( listStyleCommand.isStyleTypeSupported( 'disc' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'square' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'decimal-leading-zero' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-roman' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-alpha' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-alpha' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-latin' ) ).to.be.false;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-latin' ) ).to.be.false;
+		} );
+
+		it( 'should return `true` for all the styles by default', () => {
+			const editor = new Editor();
+			const listStyleCommand = new DocumentListStyleCommand( editor, 'default' );
+
+			expect( listStyleCommand.isStyleTypeSupported( 'disc' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'circle' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'square' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'decimal' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'decimal-leading-zero' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-roman' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-roman' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-alpha' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-alpha' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'lower-latin' ) ).to.be.true;
+			expect( listStyleCommand.isStyleTypeSupported( 'upper-latin' ) ).to.be.true;
 		} );
 	} );
 } );

@@ -85,7 +85,10 @@ t( { string: '%1 %0 emoji', plural: '%1 %0 emojis', id: 'ACTION_N_EMOJIS' }, [ q
 This example shows how to create a localizable user interface of a plugin. Here is how you can create a button that will insert a smiling face emoji. The button will have a localizable tooltip.
 
 ```js
+// Custom plugin configuration, including necessary imports.
+// The code below should be put into a custom plugin class extending the Plugin class.
 // ...
+
 editor.ui.componentFactory.add( 'smilingFaceEmoji', locale => {
 	const buttonView = new ButtonView( locale );
 
@@ -106,11 +109,13 @@ editor.ui.componentFactory.add( 'smilingFaceEmoji', locale => {
 		editor.editing.view.focus();
 	} );
 } );
+
+// The rest of the custom plugin configuration.
 // ...
 ```
 
 <info-box warning>
-	See {@link framework/guides/creating-simple-plugin how to create a complete plugin} to have a better understanding of creating CKEditor 5 plugins.
+	See {@link framework/guides/creating-simple-plugin-timestamp how to create a complete plugin} to have a better understanding of creating CKEditor 5 plugins.
 </info-box>
 
 ### Example: Localizing pending actions
@@ -119,12 +124,12 @@ editor.ui.componentFactory.add( 'smilingFaceEmoji', locale => {
 
 ```js
 class FileRepository {
+	// More methods.
 	// ...
+	
 	updatePendingAction() {
-		// ...
 		const pendingActions = this.editor.plugins.get( PendingActions );
-
-		// ...
+		
 		const t = this.editor.t;
 		const getMessage = value => t( 'Upload in progress (%0%).', value ); // Upload in progress (12%).
 
@@ -190,7 +195,8 @@ Check an example below that demonstrates a part of the `window.CKEDITOR_TRANSLAT
 		// Note that you only need to pass this function when you add translations for a new language.
 		getPluralForm: n => n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && ( n % 100 < 10 || n % 100 >= 20 ) ? 1 : 2
 	}
-	// Other languages...
+	// Other languages.
+	// ...
 }
 ```
 
@@ -229,7 +235,7 @@ msgstr "Alinear a la izquierda"
 ```
 
 <info-box warning>
-	Note that by default, the [CKEditor 5 webpack plugin](https://github.com/ckeditor/ckeditor5-dev/tree/master/packages/ckeditor5-dev-webpack-plugin) is configured to parse only the CKEditor 5 source code when looking for *localizable messages* and generating *translation assets*.
+	Note that by default, the [CKEditor 5 translations plugin](https://github.com/ckeditor/ckeditor5-dev/tree/master/packages/ckeditor5-dev-translations) is configured to parse only the CKEditor 5 source code when looking for *localizable messages* and generating *translation assets*.
 
 	If you develop your own plugin outside the CKEditor 5 ecosystem and localize it by creating *PO files*, you should override both the `sourceFilesPattern` and the `packageNamePattern` options to allow the CKEditor 5 webpack plugin to analyze the code and find *messages* with corresponding translations. You should also mention these webpack plugin changes in your package README to make other users build the localized CKEditor 5 editor with your plugin correctly. This obstacle may be simplified in the future when the localization feature gets more popular.
 </info-box>

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -2582,6 +2582,9 @@ describe( 'TableKeyboard', () => {
 							margin: 0 !important;
 							padding: 0 !important;
 							border: 0 !important
+						}
+						table {
+							table-layout: initial !important;
 						}
 						td { width: 30px !important; }
 						tr:nth-child(2) td:nth-child(2) { width: 300px !important; }

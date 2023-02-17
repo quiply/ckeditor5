@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -52,6 +52,10 @@ describe( 'HeadingElementSupport', () => {
 			} ] );
 		} );
 
+		it( 'should be named', () => {
+			expect( editor.plugins.has( 'HeadingElementSupport' ) ).to.be.true;
+		} );
+
 		it( 'should register heading schemas', () => {
 			expect( Array.from( dataSchema.getDefinitionsForView( 'h1' ) ) ).to.deep.include( {
 				model: 'heading1',
@@ -88,7 +92,7 @@ describe( 'HeadingElementSupport', () => {
 						'heading2',
 						'otherHeading'
 					],
-					isBlock: true
+					isBlock: false
 				},
 				isBlock: true
 			} ] );
@@ -442,7 +446,7 @@ describe( 'HeadingElementSupport', () => {
 						'htmlH5',
 						'htmlH6'
 					],
-					isBlock: true
+					isBlock: false
 				},
 				isBlock: true
 			} ] );

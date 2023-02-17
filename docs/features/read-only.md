@@ -19,11 +19,19 @@ The editor can be switched to or out of the read-only mode by many features, und
 	See also the {@link features/restricted-editing restricted editing feature} that lets you define which parts of a document can be editable for a group of users with limited editing rights, leaving the rest of the content non-editable to them. You can also read the [dedicated blog post](https://ckeditor.com/blog/feature-of-the-month-restricted-editing-modes/) about write-restricted editor modes.
 </info-box>
 
+<info-box info>
+	This feature is available in all {@link installation/getting-started/predefined-builds#available-builds predefined builds}.
+</info-box>
+
 ## Demo
 
 Use the demo below to toggle between editing modes and test the feature. Some features, like exports or search, are still functional even in the read-only mode. While the search is available, the replace function, however, is disabled, as changing the content is blocked.
 
 {@snippet features/read-only}
+
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
 
 <info-box>
 	You can see that after switching to read-only mode, some of the toolbar items are still active and functional. It happens thanks to the {@link module:core/command~Command#affectsData `affectsData` property}. For most of the plugins, it is set to `true` by default, which makes them inactive when entering read-only mode. However, for those plugins that do not make any changes in the model &ndash; do not affect the content &ndash; it is set to `false`, thus allowing to still make use of them in modes with restricted user write permissions.
@@ -44,6 +52,7 @@ Some use cases might require hiding the editor toolbar when entering the read-on
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
+		// The editor's configuration.
 		// ...
 	} )
 	.then( editor => {
@@ -74,3 +83,7 @@ There are more features that help control user permissions in the WYSIWYG editor
 
 * {@link features/restricted-editing Restricted editing} &ndash; Define editable areas of the document for users with restricted editing rights.
 * {@link features/comments-only-mode Comments-only mode} &ndash; Users can add comments to any part of the content instead of editing it directly.
+
+## Contribute
+
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-core](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-core).

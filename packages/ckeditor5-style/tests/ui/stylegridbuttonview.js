@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -61,6 +61,10 @@ describe( 'StyleGridButtonView', () => {
 
 			it( 'should exclude its content from the UI CSS reset for easier integration (configuration)', () => {
 				expect( button.previewView.element.classList.contains( 'ck-reset_all-excluded' ) ).to.be.true;
+			} );
+
+			it( 'should exclude the presentational preview text from assistive technologies', () => {
+				expect( button.previewView.element.getAttribute( 'aria-hidden' ) ).to.equal( 'true' );
 			} );
 
 			it( 'should render the inner preview as the element specified in definition if previewable', () => {

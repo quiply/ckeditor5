@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -20,6 +20,7 @@ import ScriptElementSupport from './integrations/script';
 import TableElementSupport from './integrations/table';
 import StyleElementSupport from './integrations/style';
 import DocumentListElementSupport from './integrations/documentlist';
+import CustomElementSupport from './integrations/customelement';
 
 /**
  * The General HTML Support feature.
@@ -51,7 +52,8 @@ export default class GeneralHtmlSupport extends Plugin {
 			ScriptElementSupport,
 			TableElementSupport,
 			StyleElementSupport,
-			DocumentListElementSupport
+			DocumentListElementSupport,
+			CustomElementSupport
 		];
 	}
 

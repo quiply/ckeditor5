@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -51,6 +51,8 @@ import TableCellProperties from '@ckeditor/ckeditor5-table/src/tablecellproperti
 import TableProperties from '@ckeditor/ckeditor5-table/src/tableproperties';
 import TableToolbar from '@ckeditor/ckeditor5-table/src/tabletoolbar';
 import TextTransformation from '@ckeditor/ckeditor5-typing/src/texttransformation';
+import TableCaption from '@ckeditor/ckeditor5-table/src/tablecaption';
+import TableColumnResize from '@ckeditor/ckeditor5-table/src/tablecolumnresize';
 import Title from '@ckeditor/ckeditor5-heading/src/title';
 import TodoList from '@ckeditor/ckeditor5-list/src/todolist';
 import Underline from '@ckeditor/ckeditor5-basic-styles/src/underline';
@@ -104,6 +106,8 @@ const pluginsClassic = [
 	TableCellProperties,
 	TableProperties,
 	TableToolbar,
+	TableCaption,
+	TableColumnResize,
 	Title,
 	TextTransformation,
 	TodoList,

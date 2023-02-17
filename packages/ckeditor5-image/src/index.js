@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -30,3 +30,4 @@ export { default as ImageUpload } from './imageupload';
 export { default as ImageUploadEditing } from './imageupload/imageuploadediting';
 export { default as ImageUploadProgress } from './imageupload/imageuploadprogress';
 export { default as ImageUploadUI } from './imageupload/imageuploadui';
+export { default as PictureEditing } from './pictureediting';

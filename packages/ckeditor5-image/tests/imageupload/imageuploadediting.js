@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -15,7 +15,7 @@ import ImageUploadEditing from '../../src/imageupload/imageuploadediting';
 import UploadImageCommand from '../../src/imageupload/uploadimagecommand';
 import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
 import UndoEditing from '@ckeditor/ckeditor5-undo/src/undoediting';
-import DataTransfer from '@ckeditor/ckeditor5-clipboard/src/datatransfer';
+import DataTransfer from '@ckeditor/ckeditor5-engine/src/view/datatransfer';
 import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo';
 import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
 
@@ -1445,7 +1445,7 @@ function tryExpect( doneFn, expectFn ) {
 // Creates data transfer object with predefined data.
 //
 // @param {String} content The content returned as `text/html` when queried.
-// @returns {module:clipboard/datatransfer~DataTransfer} DataTransfer object.
+// @returns {module:engine/view/datatransfer~DataTransfer} DataTransfer object.
 function mockDataTransfer( content ) {
 	return new DataTransfer( {
 		types: [ 'text/html' ],

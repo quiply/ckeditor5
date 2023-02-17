@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -127,13 +127,19 @@ export default class ImageUtils extends Plugin {
 	 * @returns {module:engine/view/element~Element|null}
 	 */
 	getClosestSelectedImageWidget( selection ) {
+		const selectionPosition = selection.getFirstPosition();
+
+		if ( !selectionPosition ) {
+			return null;
+		}
+
 		const viewElement = selection.getSelectedElement();
 
 		if ( viewElement && this.isImageWidget( viewElement ) ) {
 			return viewElement;
 		}
 
-		let parent = selection.getFirstPosition().parent;
+		let parent = selectionPosition.parent;
 
 		while ( parent ) {
 			if ( parent.is( 'element' ) && this.isImageWidget( parent ) ) {

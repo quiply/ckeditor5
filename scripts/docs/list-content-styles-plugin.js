@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -25,7 +25,7 @@ module.exports = contentRules => {
 
 	return {
 		postcssPlugin: 'list-content-styles',
-		Once( root ) {
+		OnceExit( root ) {
 			root.walkRules( rule => {
 				for ( const ruleSelector of rule.selectors ) {
 					const data = {

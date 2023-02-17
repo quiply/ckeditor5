@@ -4,9 +4,9 @@ category: frameworks
 order: 20
 ---
 
-{@snippet builds/frameworks/framework-integration}
+{@snippet installation/frameworks/framework-integration}
 
-# Rich text editor component for Angular
+# Angular rich text editor component
 
 <p>
 	<a href="https://www.npmjs.com/package/@ckeditor/ckeditor5-angular" target="_blank" rel="noopener">
@@ -14,20 +14,60 @@ order: 20
 	</a>
 </p>
 
-CKEditor 5 consists of {@link installation/advanced/predefined-builds ready-to-use editor builds} and {@link framework/guides/overview CKEditor 5 Framework} upon which the builds are based.
+CKEditor 5 consists of {@link installation/getting-started/predefined-builds ready-to-use editor builds} and {@link framework/index CKEditor 5 Framework} upon which the builds are based.
 
 Currently, the CKEditor 5 component for Angular supports integrating CKEditor 5 only via builds. Integrating {@link installation/advanced/integrating-from-source CKEditor 5 built from source} is not possible yet due to the lack of ability to [adjust webpack configuration in `angular-cli`](https://github.com/angular/angular-cli/issues/10618).
 
 <info-box>
-	While there is no support to integrate CKEditor 5 from source yet, you can still {@link installation/getting-started/quick-start#building-the-editor-from-source create a custom build of CKEditor 5} and include it in your Angular application.
+	While there is no support to integrate CKEditor 5 from source yet, you can still {@link installation/getting-started/quick-start-other#building-the-editor-from-source create a custom build of CKEditor 5} and include it in your Angular application.
 </info-box>
 
 ## Supported Angular versions
 
-Because of the breaking changes in the Angular library output format, the `ckeditor5-angular` package is released in the following versions to support various Angular ecosystems:
+Because of the breaking changes in the Angular library output format, the `@ckeditor/ckeditor5-angular` package is released in the following versions to support various Angular ecosystems:
 
-* Versions `1.x.x` &ndash; For **Angular 5-8** applications. We no longer provide support for these as the official support for these Angular versions was dropped.
-* Versions `2.x.x` &ndash; For **Angular 9.1+** applications. These versions are currently actively supported.
+<table>
+  <thead>
+    <tr>
+      <th>Package&nbsp;version</th>
+      <th>Angular&nbsp;version</th>
+      <th>Details</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td colspan="3">Actively supported versions</td>
+    </tr>
+    <tr>
+      <td><code>^5</code></td>
+      <td><code>13+</code></td>
+      <td>Requires Angular at least in version 13+. Lower versions are no longer maintained.</td>
+    </tr>
+    <tr>
+      <td colspan="3">Past releases (no longer maintained)</td>
+    </tr>
+    <tr>
+      <td><code>^4</code></td>
+      <td><code>9.1+</code></td>
+      <td>Requires CKEditor&nbsp;5 at least in version <a href="https://github.com/ckeditor/ckeditor5/releases/tag/v34.0.0">34</a>.</td>
+    </tr>
+    <tr>
+      <td><code>^3</code></td>
+      <td><code>9.1+</code></td>
+      <td>Requires Node.js at least in version 14.</td>
+    </tr>
+    <tr>
+      <td><code>^2</code></td>
+      <td><code>9.1+</code></td>
+      <td>Migration to TypeScript&nbsp;4. Declaration files are not backward compatible.</td>
+    </tr>
+    <tr>
+      <td><code>^1</code></td>
+      <td><code>5.x&nbsp;-&nbsp;8.x</code></td>
+      <td>Angular versions are no longer maintained.</td>
+    </tr>
+  </tbody>
+</table>
 
 All available versions are [listed on npm](https://www.npmjs.com/package/@ckeditor/ckeditor5-angular), where they can be pulled from.
 
@@ -45,7 +85,7 @@ In your existing Angular project, install the [CKEditor 5 WYSIWYG editor compone
 npm install --save @ckeditor/ckeditor5-angular
 ```
 
-Install one of the {@link installation/advanced/predefined-builds#available-builds official editor builds} or [create a custom one](#using-a-custom-ckeditor-5-build).
+Install one of the {@link installation/getting-started/predefined-builds predefined builds} or [create a custom one](#using-a-custom-ckeditor-5-build).
 
 Assuming that you picked [`@ckeditor/ckeditor5-build-classic`](https://www.npmjs.com/package/@ckeditor/ckeditor5-build-classic):
 
@@ -119,7 +159,7 @@ And then, in the template:
 
 ### Using a custom CKEditor 5 build
 
-If you want to add more plugins to the existing build or customize something that cannot be controlled with the {@link installation/getting-started/configuration editor configuration} you should create a custom build first, using the {@link installation/getting-started/quick-start#building-the-editor-from-source create a custom build guide}.
+If you want to add more plugins to the existing build or customize something that cannot be controlled with the {@link installation/getting-started/configuration editor configuration} you should create a custom build first, using the {@link installation/getting-started/quick-start-other#building-the-editor-from-source create a custom build guide}.
 
 You should finish the above tutorial with the generated `ckeditor.js` file (and corresponding translation files). In the next step you should copy it to the `src` directory and import it to the component file.
 
@@ -256,7 +296,7 @@ The following `@Input` properties are supported by the CKEditor 5 rich text edit
 
 ### `editor` (required)
 
-The {@link installation/getting-started/basic-api `Editor`} which provides the static {@link module:core/editor/editor~Editor.create `create()`} method to create an instance of the editor:
+The {@link installation/getting-started/editor-lifecycle `Editor`} which provides the static {@link module:core/editor/editor~Editor.create `create()`} method to create an instance of the editor:
 
 ```html
 <ckeditor [editor]="Editor"></ckeditor>
@@ -368,6 +408,14 @@ export class MyComponent {
 	<ckeditor [watchdog]="watchdog" ...></ckeditor>
 </div>
 ```
+
+### `disableTwoWayDataBinding`
+
+Allows disabling the two-way data binding mechanism. The default value is `false`.
+
+The reason for the introduction of this option are performance issues in large documents. By default, while using the `ngModel` directive, whenever the editor's data is changed, the component must synchronize the data between the editor instance and the connected property. This results in calling the {@link module:core/editor/utils/dataapimixin~DataApi#getData `editor.getData()`} function, which causes a massive slowdown while typing in large documents.
+
+This option allows the integrator to disable the default behavior and only call the {@link module:core/editor/utils/dataapimixin~DataApi#getData `editor.getData()`} method on demand, which prevents the slowdowns. You can read more in the [relevant issue](https://github.com/ckeditor/ckeditor5-angular/issues/141).
 
 ## Supported `@Output` properties
 
@@ -577,9 +625,9 @@ TypeError: Cannot read property 'data-ck-expando' of undefined
 
 Workaround: in `polyfills.js` import zone.js using `import zone.js/dist/zone.js` instead of `import 'zone.js'`.
 More details:
-- https://github.com/ckeditor/ckeditor5-angular/issues/109
-- https://github.com/angular/angular/tree/master/packages/zone.js#breaking-changes-since-zonejs-v0111
+- [https://github.com/ckeditor/ckeditor5-angular/issues/109](https://github.com/ckeditor/ckeditor5-angular/issues/109)
+- [https://github.com/angular/angular/tree/master/packages/zone.js#breaking-changes-since-zonejs-v0111](https://github.com/angular/angular/tree/master/packages/zone.js#breaking-changes-since-zonejs-v0111)
 
 ## Contributing and reporting issues
 
-The source code of the CKEditor 5 rich text editor component for Angular is available on GitHub in https://github.com/ckeditor/ckeditor5-angular.
+The source code of the CKEditor 5 rich text editor component for Angular is available on GitHub in [https://github.com/ckeditor/ckeditor5-angular](https://github.com/ckeditor/ckeditor5-angular).

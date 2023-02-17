@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -135,7 +135,7 @@ export default {
 			view: 'tbody',
 			modelSchema: {
 				allowIn: 'htmlTable',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -143,7 +143,7 @@ export default {
 			view: 'thead',
 			modelSchema: {
 				allowIn: 'htmlTable',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -151,7 +151,7 @@ export default {
 			view: 'tfoot',
 			modelSchema: {
 				allowIn: 'htmlTable',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -160,14 +160,32 @@ export default {
 			modelSchema: {
 				allowIn: 'htmlTable',
 				allowChildren: '$text',
-				isBlock: true
+				isBlock: false
+			}
+		},
+		{
+			model: 'htmlColgroup',
+			view: 'colgroup',
+			modelSchema: {
+				allowIn: 'htmlTable',
+				allowChildren: 'col',
+				isBlock: false
+			}
+		},
+		{
+			model: 'htmlCol',
+			view: 'col',
+			modelSchema: {
+				allowIn: 'htmlColgroup',
+				isBlock: false
 			}
 		},
 		{
 			model: 'htmlTr',
 			view: 'tr',
 			modelSchema: {
-				allowIn: [ 'htmlTable', 'htmlThead', 'htmlTbody' ]
+				allowIn: [ 'htmlTable', 'htmlThead', 'htmlTbody' ],
+				isLimit: true
 			}
 		},
 		// TODO can also include text.
@@ -176,7 +194,9 @@ export default {
 			view: 'td',
 			modelSchema: {
 				allowIn: 'htmlTr',
-				allowContentOf: '$container'
+				allowContentOf: '$container',
+				isLimit: true,
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -185,7 +205,9 @@ export default {
 			view: 'th',
 			modelSchema: {
 				allowIn: 'htmlTr',
-				allowContentOf: '$container'
+				allowContentOf: '$container',
+				isLimit: true,
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -194,7 +216,7 @@ export default {
 			view: 'figure',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include other block elements.
@@ -204,7 +226,7 @@ export default {
 			modelSchema: {
 				allowIn: 'htmlFigure',
 				allowChildren: '$text',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -213,7 +235,7 @@ export default {
 			view: 'address',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -222,7 +244,7 @@ export default {
 			view: 'aside',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -231,7 +253,7 @@ export default {
 			view: 'main',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -240,7 +262,7 @@ export default {
 			view: 'details',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -249,7 +271,7 @@ export default {
 			modelSchema: {
 				allowChildren: '$text',
 				allowIn: 'htmlDetails',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -266,7 +288,7 @@ export default {
 			view: 'fieldset',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include h1-h6.
@@ -284,7 +306,7 @@ export default {
 			view: 'header',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -293,7 +315,7 @@ export default {
 			view: 'footer',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -317,7 +339,7 @@ export default {
 					'htmlH5',
 					'htmlH6'
 				],
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -367,7 +389,7 @@ export default {
 			modelSchema: {
 				allowWhere: '$container',
 				allowChildren: [ '$htmlList', 'htmlLi' ],
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -405,7 +427,7 @@ export default {
 			modelSchema: {
 				allowIn: '$htmlList',
 				allowChildren: '$text',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -420,7 +442,7 @@ export default {
 			view: 'article',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -428,7 +450,7 @@ export default {
 			view: 'section',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		// TODO can also include text.
@@ -437,7 +459,7 @@ export default {
 			view: 'nav',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -446,7 +468,7 @@ export default {
 			modelSchema: {
 				allowWhere: '$container',
 				allowChildren: [ 'htmlDt', 'htmlDd' ],
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -454,7 +476,7 @@ export default {
 			view: 'dt',
 			modelSchema: {
 				allowChildren: '$block',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -462,7 +484,7 @@ export default {
 			view: 'dd',
 			modelSchema: {
 				allowChildren: '$block',
-				isBlock: true
+				isBlock: false
 			}
 		},
 		{
@@ -470,7 +492,7 @@ export default {
 			view: 'center',
 			modelSchema: {
 				inheritAllFrom: '$container',
-				isBlock: true
+				isBlock: false
 			}
 		}
 	],
@@ -577,6 +599,7 @@ export default {
 			model: 'htmlA',
 			view: 'a',
 			priority: 5,
+			coupledAttribute: 'linkHref',
 			attributeProperties: {
 				copyOnEnter: true
 			}
@@ -584,42 +607,53 @@ export default {
 		{
 			model: 'htmlStrong',
 			view: 'strong',
+			coupledAttribute: 'bold',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlB',
 			view: 'b',
+			coupledAttribute: 'bold',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlI',
 			view: 'i',
+			coupledAttribute: 'italic',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlEm',
 			view: 'em',
+			coupledAttribute: 'italic',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlS',
 			view: 's',
+			coupledAttribute: 'strikethrough',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		// TODO According to HTML-spec can behave as div-like element, although CKE4 only handles it as an inline element.
 		{
 			model: 'htmlDel',
 			view: 'del',
+			coupledAttribute: 'strikethrough',
 			attributeProperties: {
 				copyOnEnter: true
 			}
@@ -635,29 +669,37 @@ export default {
 		{
 			model: 'htmlU',
 			view: 'u',
+			coupledAttribute: 'underline',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlSub',
 			view: 'sub',
+			coupledAttribute: 'subscript',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlSup',
 			view: 'sup',
+			coupledAttribute: 'superscript',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
 			model: 'htmlCode',
 			view: 'code',
+			coupledAttribute: 'code',
 			attributeProperties: {
-				copyOnEnter: true
+				copyOnEnter: true,
+				isFormatting: true
 			}
 		},
 		{
@@ -824,6 +866,14 @@ export default {
 		{
 			model: 'htmlStyle',
 			view: 'style',
+			modelSchema: {
+				allowWhere: [ '$text', '$block' ],
+				isInline: true
+			}
+		},
+		{
+			model: 'htmlCustomElement',
+			view: '$customElement',
 			modelSchema: {
 				allowWhere: [ '$text', '$block' ],
 				isInline: true

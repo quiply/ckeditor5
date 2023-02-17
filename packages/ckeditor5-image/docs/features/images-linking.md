@@ -39,6 +39,10 @@ Click on the images to invoke the contextual toolbar. Use the link icon {@icon @
 
 {@snippet features/image-link}
 
+<info-box info>
+	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
+
 ## Installation
 
 The image linking feature is not enabled by default in any of the editor builds. In order to enable it, you need to load the {@link module:link/linkimage~LinkImage} plugin. Read more in the {@link features/images-installation installation guide}.
@@ -60,4 +64,4 @@ The {@link module:link/linkimage~LinkImage} plugin registers:
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-link).

@@ -95,6 +95,10 @@ You can change the style of an individual image using the contextual toolbar inv
 
 </div>
 
+<info-box info>
+	All demos in this guide only present a limited set of features for clarity. Visit the {@link examples/builds/full-featured-editor full-featured editor example} to see more in action.
+</info-box>
+
 The editor above does not require any configuration, using one of the following builds: classic, inline, balloon or balloon-block, for example:
 
 ```js
@@ -102,8 +106,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic/src/ckeditor';
 
 ClassicEditor
 	.create( document.querySelector( '#editor' ) )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 ### Presentational styles
@@ -139,15 +143,15 @@ See the result below:
 
 </div>
 
-This set of buttons and styles is available by default in the predefined {@link installation/advanced/predefined-builds#document-editor document editor build} and does not require any additional customization:
+This set of buttons and styles is available by default in the predefined {@link installation/getting-started/predefined-builds#document-editor document editor build} and does not require any additional customization:
 
 ```js
 import DecoupledEditor from '@ckeditor/ckeditor5-editor-decoupled/src/decouplededitor';
 
 DecoupledEditor.
 	.create( document.querySelector( '#editor' ) )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 <info-box warning>
@@ -176,7 +180,8 @@ The editor presented above uses custom image styles, custom image toolbar config
 ```js
 ClassicEditor
 	.create( document.querySelector( '#editor' ), {
-		...
+		// More of editor's config.
+		// ...
 		image: {
 			styles: {
 				// Defining custom styling options for the images.
@@ -214,6 +219,7 @@ ClassicEditor
 				// Grouping the buttons for the icon-like image styling
 				// into one drop-down.
 				name: 'imageStyle:icons',
+				title: 'Alignment',
 				items: [
 					'imageStyle:margin-left',
 					'imageStyle:margin-right',
@@ -224,14 +230,15 @@ ClassicEditor
 				// Grouping the buttons for the regular
 				// picture-like image styling into one drop-down.
 				name: 'imageStyle:pictures',
+				title: 'Style',
 				items: [ 'imageStyle:block', 'imageStyle:side' ],
 				defaultItem: 'imageStyle:block'
 			}, '|', 'toggleImageCaption', 'linkImage'
 			]
 		}
 	} )
-	.then( ... )
-	.catch( ... );
+	.then( /* ... */ )
+	.catch( /* ... */ );
 ```
 
 It also applies multiple CSS rules to not only display custom image styles (the `'image-margin-right'`, `'image-margin-left'` and `'image-side'` classes) properly, but also to provide the default {@link installation/advanced/content-styles content styles}, so the appearance of headers, paragraphs, links, captions and newly inserted images is consistent.
@@ -417,7 +424,7 @@ The `ImageStyle` plugin provides a set of default styles depending on the loaded
 
 ## Installation
 
-This feature is available in all {@link installation/advanced/predefined-builds ready-to-use editor builds}. If your integrations uses a custom editor build, check out the {@link features/images-installation image feature installation guide} to learn how to enable this feature.
+This feature is available in all {@link installation/getting-started/predefined-builds ready-to-use editor builds}. If your integrations uses a custom editor build, check out the {@link features/images-installation image feature installation guide} to learn how to enable this feature.
 
 ## Common API
 
@@ -436,4 +443,4 @@ The {@link module:image/imagestyle~ImageStyle} plugin registers:
 
 ## Contribute
 
-The source code of the feature is available on GitHub in https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image.
+The source code of the feature is available on GitHub in [https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image](https://github.com/ckeditor/ckeditor5/tree/master/packages/ckeditor5-image).

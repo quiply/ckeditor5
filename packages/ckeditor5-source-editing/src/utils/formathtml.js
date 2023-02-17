@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2022, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -138,5 +138,6 @@ function isClosingTag( line, elementsToFormat ) {
 // @param {String} [indentChar] Indentation character(s). 4 spaces by default.
 // @returns {String}
 function indentLine( line, indentCount, indentChar = '    ' ) {
-	return `${ indentChar.repeat( indentCount ) }${ line }`;
+	// More about Math.max() here in https://github.com/ckeditor/ckeditor5/issues/10698.
+	return `${ indentChar.repeat( Math.max( 0, indentCount ) ) }${ line }`;
 }
