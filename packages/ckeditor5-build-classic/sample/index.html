@@ -35,7 +35,12 @@
 <script src="../build/ckeditor.js"></script>
 <script>
 	CKEDITOR.ClassicEditor
-			.create( document.querySelector( '#classic-editor' ) )
+			.create( document.querySelector( '#classic-editor' ), {
+				toolbar: {
+					items: ['mediaEmbed']
+				},
+				mediaEmbed: {}
+			})
 			.then( editor => {
 				window.editor = editor;
 			} )
