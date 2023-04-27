@@ -37,9 +37,16 @@
 	CKEDITOR.ClassicEditor
 			.create( document.querySelector( '#classic-editor' ), {
 				toolbar: {
-					items: ['mediaEmbed']
+					items: ['mediaEmbed', 'bulletedList']
 				},
-				mediaEmbed: {}
+				mediaEmbed: {},
+				list: {
+					properties: {
+						styles: false,
+						startIndex: true,
+						reversed: true
+					}
+				}
 			})
 			.then( editor => {
 				window.editor = editor;
