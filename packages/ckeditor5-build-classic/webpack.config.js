@@ -21,7 +21,7 @@ module.exports = {
 
 	output: {
 		// The name under which the editor will be exported.
-		library: 'CKEDITOR',
+		library: 'ClassicEditor',
 
 		path: path.resolve( __dirname, 'build' ),
 		filename: 'ckeditor.js',
@@ -59,7 +59,7 @@ module.exports = {
 
 	module: {
 		rules: [
-			loaders.getIconsLoader( { matchExtensionOnly: true } ),
+			loaders.getIconsLoader( { useShortPattern: true } ),
 			loaders.getStylesLoader( {
 				themePath: require.resolve( '@ckeditor/ckeditor5-theme-lark' ),
 				minify: true
