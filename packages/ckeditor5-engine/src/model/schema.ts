@@ -31,9 +31,9 @@ import { CKEditorError, ObservableMixin } from '@ckeditor/ckeditor5-utils';
  *
  * Read more about the schema in:
  *
- * * The {@glink framework/guides/architecture/editing-engine#schema schema section} of the
- * {@glink framework/guides/architecture/editing-engine Introduction to the Editing engine architecture} guide.
- * * The {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+ * * The {@glink framework/architecture/editing-engine#schema schema section} of the
+ * {@glink framework/architecture/editing-engine Introduction to the Editing engine architecture} guide.
+ * * The {@glink framework/deep-dive/schema Schema deep-dive} guide.
  */
 export default class Schema extends ObservableMixin() {
 	private readonly _sourceDefinitions: Record<string, Array<SchemaItemDefinition>> = {};
@@ -79,9 +79,9 @@ export default class Schema extends ObservableMixin() {
 			 *
 			 * This situation may happen when:
 			 *
-			 * * Two or more plugins called {@link #register `register()`} with the same name. This will usually mean that
-			 * there is a collision between plugins which try to use the same element in the model. Unfortunately,
-			 * the only way to solve this is by modifying one of these plugins to use a unique model element name.
+			 * * Two or more plugins called {@link module:engine/model/schema~Schema#register `register()`} with the same name.
+			 * This will usually mean that there is a collision between plugins which try to use the same element in the model.
+			 * Unfortunately, the only way to solve this is by modifying one of these plugins to use a unique model element name.
 			 * * A single plugin was loaded twice. This happens when it is installed by npm/yarn in two versions
 			 * and usually means one or more of the following issues:
 			 *     * a version mismatch (two of your dependencies require two different versions of this plugin),
@@ -138,7 +138,7 @@ export default class Schema extends ObservableMixin() {
 			 * Cannot extend an item which was not registered yet.
 			 *
 			 * This error happens when a plugin tries to extend the schema definition of an item which was not
-			 * {@link #register registered} yet.
+			 * {@link module:engine/model/schema~Schema#register registered} yet.
 			 *
 			 * @param itemName The name of the model element which is being extended.
 			 * @error schema-cannot-extend-missing-item
@@ -218,8 +218,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isBlock( paragraphElement ); // -> true
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#block-elements Block elements} section of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#block-elements Block elements} section of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isBlock( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -243,8 +243,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isLimit( 'imageBlock' ); // -> true
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#limit-elements Limit elements} section of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#limit-elements Limit elements} section of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isLimit( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -272,8 +272,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isObject( imageElement ); // -> true
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#object-elements Object elements} section of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#object-elements Object elements} section of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isObject( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -299,8 +299,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isInline( text ); // -> true
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#inline-elements Inline elements} section of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#inline-elements Inline elements} section of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isInline( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -322,8 +322,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isSelectable( text ); // -> false
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#selectable-elements Selectable elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#selectable-elements Selectable elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isSelectable( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -349,8 +349,8 @@ export default class Schema extends ObservableMixin() {
 	 * schema.isContent( text ); // -> true
 	 * ```
 	 *
-	 * See the {@glink framework/guides/deep-dive/schema#content-elements Content elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide for more details.
+	 * See the {@glink framework/deep-dive/schema#content-elements Content elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide for more details.
 	 */
 	public isContent( item: string | Item | DocumentFragment | SchemaContextItem ): boolean {
 		const def = this.getDefinition( item );
@@ -516,7 +516,7 @@ export default class Schema extends ObservableMixin() {
 	 * The callback may return `true/false` to override `checkChild()`'s return value. If it does not return
 	 * a boolean value, the default algorithm (or other callbacks) will define `checkChild()`'s return value.
 	 */
-	public addChildCheck( callback: ( ctx: SchemaContext, def: SchemaCompiledItemDefinition ) => unknown ): void {
+	public addChildCheck( callback: SchemaChildCheckCallback ): void {
 		this.on<SchemaCheckChildEvent>( 'checkChild', ( evt, [ ctx, childDef ] ) => {
 			// checkChild() was called with a non-registered child.
 			// In 99% cases such check should return false, so not to overcomplicate all callbacks
@@ -577,7 +577,7 @@ export default class Schema extends ObservableMixin() {
 	 * The callback may return `true/false` to override `checkAttribute()`'s return value. If it does not return
 	 * a boolean value, the default algorithm (or other callbacks) will define `checkAttribute()`'s return value.
 	 */
-	public addAttributeCheck( callback: ( context: SchemaContext, attributeName: string ) => unknown ): void {
+	public addAttributeCheck( callback: SchemaAttributeCheckCallback ): void {
 		this.on<SchemaCheckAttributeEvent>( 'checkAttribute', ( evt, [ ctx, attributeName ] ) => {
 			const retValue = callback( ctx, attributeName );
 
@@ -1011,16 +1011,16 @@ export default class Schema extends ObservableMixin() {
 }
 
 /**
- * Event fired when the {@link #checkChild} method is called. It allows plugging in
+ * Event fired when the {@link ~Schema#checkChild} method is called. It allows plugging in
  * additional behavior, for example implementing rules which cannot be defined using the declarative
  * {@link module:engine/model/schema~SchemaItemDefinition} interface.
  *
- * **Note:** The {@link #addChildCheck} method is a more handy way to register callbacks. Internally,
+ * **Note:** The {@link ~Schema#addChildCheck} method is a more handy way to register callbacks. Internally,
  * it registers a listener to this event but comes with a simpler API and it is the recommended choice
  * in most of the cases.
  *
- * The {@link #checkChild} method fires an event because it is
- * {@link module:utils/observablemixin~ObservableMixin#decorate decorated} with it. Thanks to that you can
+ * The {@link ~Schema#checkChild} method fires an event because it is
+ * {@link module:utils/observablemixin~Observable#decorate decorated} with it. Thanks to that you can
  * use this event in various ways, but the most important use case is overriding standard behavior of the
  * `checkChild()` method. Let's see a typical listener template:
  *
@@ -1073,7 +1073,7 @@ export default class Schema extends ObservableMixin() {
  * }, { priority: 'high' } );
  * ```
  *
- * @eventName checkChild
+ * @eventName ~Schema#checkChild
  * @param args The `checkChild()`'s arguments.
  */
 export type SchemaCheckChildEvent = {
@@ -1082,16 +1082,16 @@ export type SchemaCheckChildEvent = {
 };
 
 /**
- * Event fired when the {@link #checkAttribute} method is called. It allows plugging in
+ * Event fired when the {@link ~Schema#checkAttribute} method is called. It allows plugging in
  * additional behavior, for example implementing rules which cannot be defined using the declarative
  * {@link module:engine/model/schema~SchemaItemDefinition} interface.
  *
- * **Note:** The {@link #addAttributeCheck} method is a more handy way to register callbacks. Internally,
+ * **Note:** The {@link ~Schema#addAttributeCheck} method is a more handy way to register callbacks. Internally,
  * it registers a listener to this event but comes with a simpler API and it is the recommended choice
  * in most of the cases.
  *
- * The {@link #checkAttribute} method fires an event because it is
- * {@link module:utils/observablemixin~ObservableMixin#decorate decorated} with it. Thanks to that you can
+ * The {@link ~Schema#checkAttribute} method fires an event because it is
+ * {@link module:utils/observablemixin~Observable#decorate decorated} with it. Thanks to that you can
  * use this event in various ways, but the most important use case is overriding the standard behavior of the
  * `checkAttribute()` method. Let's see a typical listener template:
  *
@@ -1141,7 +1141,7 @@ export type SchemaCheckChildEvent = {
  * }, { priority: 'high' } );
  * ```
  *
- * @eventName checkAttribute
+ * @eventName ~Schema#checkAttribute
  * @param args The `checkAttribute()`'s arguments.
  */
 export type SchemaCheckAttributeEvent = {
@@ -1182,7 +1182,7 @@ export type SchemaCheckAttributeEvent = {
  * {@link module:engine/model/schema~Schema#isLimit `isLimit()`} returns `true` for object elements automatically.
  *
  * Read more about the meaning of these types in the
- * {@glink framework/guides/deep-dive/schema#defining-additional-semantics dedicated section of the Schema deep-dive} guide.
+ * {@glink framework/deep-dive/schema#defining-additional-semantics dedicated section of the Schema deep-dive} guide.
  *
  * # Generic items
  *
@@ -1227,7 +1227,7 @@ export type SchemaCheckAttributeEvent = {
  * (paragraphs, lists items, headings, images) which, in turn, may contain text inside.
  *
  * By inheriting from the generic items you can define new items which will get extended by other editor features.
- * Read more about generic types in the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+ * Read more about generic types in the {@glink framework/deep-dive/schema Schema deep-dive} guide.
  *
  * # Example definitions
  *
@@ -1367,8 +1367,8 @@ export interface SchemaItemDefinition {
 	 * Most block type items will inherit from `$block` (through `inheritAllFrom`).
 	 *
 	 * Read more about the block elements in the
-	 * {@glink framework/guides/deep-dive/schema#block-elements Block elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+	 * {@glink framework/deep-dive/schema#block-elements Block elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide.
 	 */
 	isBlock?: boolean;
 
@@ -1377,7 +1377,7 @@ export interface SchemaItemDefinition {
 	 * `$text`, `softBreak` (`<br>`), etc.
 	 *
 	 * Read more about the inline elements in the
-	 * {@glink framework/guides/deep-dive/schema#inline-elements Inline elements section} of the Schema deep-dive guide.
+	 * {@glink framework/deep-dive/schema#inline-elements Inline elements section} of the Schema deep-dive guide.
 	 */
 	isInline?: boolean;
 
@@ -1387,8 +1387,8 @@ export interface SchemaItemDefinition {
 	 * a limit element are limited to its content.
 	 *
 	 * Read more about the limit elements in the
-	 * {@glink framework/guides/deep-dive/schema#limit-elements Limit elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+	 * {@glink framework/deep-dive/schema#limit-elements Limit elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide.
 	 */
 	isLimit?: boolean;
 
@@ -1400,7 +1400,7 @@ export interface SchemaItemDefinition {
 	 * {@link module:engine/model/schema~Schema#isLimit `isLimit()`} returns `true` for object elements automatically.
 	 *
 	 * Read more about the object elements in the
-	 * {@glink framework/guides/deep-dive/schema#object-elements Object elements section} of the Schema deep-dive guide.
+	 * {@glink framework/deep-dive/schema#object-elements Object elements section} of the Schema deep-dive guide.
 	 */
 	isObject?: boolean;
 
@@ -1412,8 +1412,8 @@ export interface SchemaItemDefinition {
 	 * {@link module:engine/model/schema~Schema#isSelectable `isSelectable()`} returns `true` for object elements automatically.
 	 *
 	 * Read more about selectable elements in the
-	 * {@glink framework/guides/deep-dive/schema#selectable-elements Selectable elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+	 * {@glink framework/deep-dive/schema#selectable-elements Selectable elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide.
 	 */
 	isSelectable?: boolean;
 
@@ -1425,8 +1425,8 @@ export interface SchemaItemDefinition {
 	 * {@link module:engine/model/schema~Schema#isContent `isContent()`} returns `true` for object elements automatically.
 	 *
 	 * Read more about content elements in the
-	 * {@glink framework/guides/deep-dive/schema#content-elements Content elements section} of
-	 * the {@glink framework/guides/deep-dive/schema Schema deep-dive} guide.
+	 * {@glink framework/deep-dive/schema#content-elements Content elements section} of
+	 * the {@glink framework/deep-dive/schema Schema deep-dive} guide.
 	 */
 	isContent?: boolean;
 }
@@ -1766,6 +1766,10 @@ export interface AttributeProperties {
 
 	[ name: string ]: unknown;
 }
+
+export type SchemaAttributeCheckCallback = ( context: SchemaContext, attributeName: string ) => unknown;
+
+export type SchemaChildCheckCallback = ( ctx: SchemaContext, def: SchemaCompiledItemDefinition ) => unknown;
 
 function compileBaseItemRule( sourceItemRules: Array<SchemaItemDefinition>, itemName: string ): SchemaCompiledItemDefinitionInternal {
 	const itemRule = {

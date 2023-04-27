@@ -11,11 +11,11 @@
 
 import CKEditorError from './ckeditorerror';
 
-const version = '36.0.1';
+const version = '37.1.0';
 
 export default version;
 
-/* istanbul ignore next */
+/* istanbul ignore next -- @preserve */
 const windowOrGlobal = typeof window === 'object' ? window : global;
 
 declare global {
@@ -23,7 +23,7 @@ declare global {
 	var CKEDITOR_VERSION: string;
 }
 
-/* istanbul ignore next */
+/* istanbul ignore next -- @preserve */
 if ( windowOrGlobal.CKEDITOR_VERSION ) {
 	/**
 	 * This error is thrown when due to a mistake in how CKEditor 5 was installed or initialized, some
@@ -63,8 +63,8 @@ if ( windowOrGlobal.CKEDITOR_VERSION ) {
 	 * This scenario is very similar to the previous one, but has a different origin.
 	 *
 	 * Let's assume that you wanted to use CKEditor 5 from source, as explained in the
-	 * {@glink installation/advanced/alternative-setups/integrating-from-source "Building from source"} section
-	 * or in the {@glink framework/guides/quick-start "Quick start"} guide of CKEditor 5 Framework.
+	 * {@glink installation/advanced/alternative-setups/integrating-from-source-webpack "Building from source"} section
+	 * or in the {@glink framework/quick-start "Quick start"} guide of CKEditor 5 Framework.
 	 *
 	 * The correct way to do so is to import an editor and plugins and run them together like this:
 	 *

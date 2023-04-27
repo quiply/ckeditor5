@@ -193,7 +193,7 @@ export default class Position extends TypeCheckable {
 				 * where this position points.
 				 *
 				 * Read more about model positions and offsets in
-				 * the {@glink framework/guides/architecture/editing-engine#indexes-and-offsets Editing engine architecture} guide.
+				 * the {@glink framework/architecture/editing-engine#indexes-and-offsets Editing engine architecture} guide.
 				 *
 				 * @error model-position-path-incorrect
 				 * @param position The incorrect position.
@@ -1002,11 +1002,11 @@ export default class Position extends TypeCheckable {
 		return new Position( doc.getRoot( json.root )!, json.path, json.stickiness );
 	}
 
-	// @if CK_DEBUG_ENGINE // toString() {
+	// @if CK_DEBUG_ENGINE // public override toString(): string {
 	// @if CK_DEBUG_ENGINE // 	return `${ this.root } [ ${ this.path.join( ', ' ) } ]`;
 	// @if CK_DEBUG_ENGINE // }
 
-	// @if CK_DEBUG_ENGINE // log() {
+	// @if CK_DEBUG_ENGINE // public log(): void {
 	// @if CK_DEBUG_ENGINE // 	console.log( 'ModelPosition: ' + this );
 	// @if CK_DEBUG_ENGINE // }
 }

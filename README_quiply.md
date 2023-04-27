@@ -11,8 +11,14 @@ Update git:
 4) -> conflicts: ignore conflicts in build directory (build/ckeditor.js and build/translations/*)
 5) -> update versions in ckeditor5-build-classic/package.json and(!) in ckeditor5-emojis/package.json  
 6) rm -rf node_modules && yarn install
-7) remove yarn.lock
-           
+  
+Only if build problems occur:      
+8) cd ../..
+7) rm yarn.lock
+9) rm -rf node_modules
+10) yarn install
+11) cd packages/ckeditor5-build-classic 
+    
 Build new ckeditor version:
 ===
 
