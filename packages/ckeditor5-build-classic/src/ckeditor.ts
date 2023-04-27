@@ -29,7 +29,6 @@ import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
 import { Table, TableCellProperties, TableProperties, TableToolbar, TableCaption, TableColumnResize } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
-import { Emojis } from '@harrisonlucas/ckeditor5-emojis';
 
 export default class ClassicEditor extends ClassicEditorBase {
 	public static override builtinPlugins = [
@@ -81,9 +80,7 @@ export default class ClassicEditor extends ClassicEditorBase {
 		Title,
 		TextTransformation,
 		TodoList,
-		Underline,
-
-		Emojis
+		Underline
 	];
 
 	public static override defaultConfig = {

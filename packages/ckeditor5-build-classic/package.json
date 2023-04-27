@@ -48,8 +48,7 @@
     "@ckeditor/ckeditor5-paste-from-office": "^37.1.0",
     "@ckeditor/ckeditor5-remove-format": "^37.1.0",
     "@ckeditor/ckeditor5-table": "^37.1.0",
-    "@ckeditor/ckeditor5-typing": "^37.1.0",
-    "@harrisonlucas/ckeditor5-emojis": "^1.0.1-quiply"
+    "@ckeditor/ckeditor5-typing": "^37.1.0"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-core": "^37.1.0",
