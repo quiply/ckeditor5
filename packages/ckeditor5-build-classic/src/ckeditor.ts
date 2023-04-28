@@ -27,6 +27,7 @@ import { Mention } from '@ckeditor/ckeditor5-mention';
 import { Paragraph } from '@ckeditor/ckeditor5-paragraph';
 import { PasteFromOffice } from '@ckeditor/ckeditor5-paste-from-office';
 import { RemoveFormat } from '@ckeditor/ckeditor5-remove-format';
+import { SpecialCharacters, SpecialCharactersEssentials } from '@ckeditor/ckeditor5-special-characters';
 import { Table, TableCellProperties, TableProperties, TableToolbar, TableCaption, TableColumnResize } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
@@ -68,6 +69,8 @@ export default class ClassicEditor extends ClassicEditorBase {
 		Paragraph,
 		PasteFromOffice,
 		RemoveFormat,
+		SpecialCharacters,
+		SpecialCharactersEssentials,
 		Strikethrough,
 		Subscript,
 		Superscript,
