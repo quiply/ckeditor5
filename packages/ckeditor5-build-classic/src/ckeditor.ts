@@ -31,6 +31,34 @@ import { SpecialCharacters, SpecialCharactersEssentials } from '@ckeditor/ckedit
 import { Table, TableCellProperties, TableProperties, TableToolbar, TableCaption, TableColumnResize } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
+import emojiIcon from '@ckeditor/ckeditor5-build-classic/theme/icons/qyEmoji.svg';
+import { Plugin } from '@ckeditor/ckeditor5-core';
+import { ButtonView } from '@ckeditor/ckeditor5-ui';
+
+class QyEmojiPlugin extends Plugin {
+	public init(): void {
+		const editor = this.editor;
+
+		editor.ui.componentFactory.add( 'qyEmojiPlugin', locale => {
+			const view = new ButtonView( locale );
+
+			view.set( {
+				label: 'Emoji',
+				icon: emojiIcon,
+				tooltip: true
+			} );
+
+			// Callback executed once the icon is clicked
+			view.on( 'execute', () => {
+				// fire a JS event
+				window.dispatchEvent( new CustomEvent( 'qy-ckeditor-emoji-clicked', { detail: { ckEditorParam: editor } } ) );
+			} );
+
+			return view;
+		} );
+	}
+}
+
 export default class ClassicEditor extends ClassicEditorBase {
 	public static override builtinPlugins = [
 		Alignment,
@@ -83,7 +111,9 @@ export default class ClassicEditor extends ClassicEditorBase {
 		Title,
 		TextTransformation,
 		TodoList,
-		Underline
+		Underline,
+
+		QyEmojiPlugin
 	];
 
 	public static override defaultConfig = {
