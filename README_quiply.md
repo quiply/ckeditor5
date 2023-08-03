@@ -9,7 +9,7 @@ Update git:
 2) git fetch upstream
 3) "git merge upstream/stable" (or "git rebase upstream/stable")
 4) -> conflicts: ignore conflicts in build directory (build/ckeditor.js and build/translations/*)
-5) -> update versions in ckeditor5-build-classic/package.json and(!) in ckeditor5-emojis/package.json  
+5) -> update versions in ckeditor5-build-classic/package.json  
 6) rm -rf node_modules && yarn install
   
 Only if build problems occur:      

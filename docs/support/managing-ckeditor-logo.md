@@ -16,15 +16,25 @@ This logo is only visible when the editor is focused and only in the editable. T
 
 The logo **will not be displayed for customers with commercial licenses**, but please read on as certain actions need to be taken to white-label your CKEditor 5 installation. You can [reach out to our Technical Support team](https://ckeditor.com/contact/) if you have any questions.
 
+However, even as a paid customer, you can [keep the logo](#how-to-keep-the-powered-by-ckeditor-logo) if you wish.
+
 ## How to remove the "Powered by CKEditor" logo?
 
 To remove the logo, you need to obtain a commercial license and then configure the {@link module:core/editor/editorconfig~EditorConfig#licenseKey `config.licenseKey`} setting.
 
 Refer to the {@link support/license-key-and-activation License key and activation} guide for details on where to find the license key and how to use it in your configuration.
 
-## How to configure the "Powered by CKEditor" logo?
+## How to keep the "Powered by CKEditor" logo?
 
-For free, open source users, the "Powered by CKEditor" logo will always be displayed when the editor is in focus. You can, however, adjust some aspects of it to suit your editor integration better.
+If you wish to keep the "Powered by CKEditor" logo in your editor even if you are a paid customer (numerous reasons can play a factor here), you can do it easily. Just set the following option to `true` (by default it is set to `false`) and enjoy the branding!
+
+```js
+config.ui.poweredBy.forceVisible: true
+```
+
+## How to configure the layout of the "Powered by CKEditor" logo?
+
+For free, open-source users, the "Powered by CKEditor" logo will always be displayed when the editor is in focus. You can, however, adjust some aspects of it to suit your editor integration better.
 
 ### Layout customization
 
@@ -37,7 +47,7 @@ You can configure the following properties of the logo:
 
 The complete reference is available in the {@link module:core/editor/editorconfig~EditorConfig#ui API documentation}.
 
-The example below shows how the logo can be adjusted using just the available editor configuration.
+The example below shows how the logo can be adjusted using the available editor configuration. Focus the editor to display the customized logo.
 
 {@snippet build-classic-source}
 
@@ -87,10 +97,11 @@ If you need, you can dive even deeper to make it coherent with your product. For
 It was achieved with just a few style rules:
 
 ```css
-	/* PoweredBy logo customization. */
+	/* "Powered by CKEditor" logo customization. */
 	.ck.ck-balloon-panel.ck-powered-by-balloon {
-		--ck-powered-by-background: hsl(270, 1%, 29%); /* You can use your own variable here as well. */
-		--ck-powered-by-border-color: hsl(270, 1%, 29%); /* You can use your own variable here as well. */
+		/* You can use your own variables here as well. */
+		--ck-powered-by-background: hsl(270, 1%, 29%);
+		--ck-powered-by-border-color: hsl(270, 1%, 29%);
 	}
 
 	.ck.ck-balloon-panel.ck-powered-by-balloon .ck.ck-powered-by .ck-powered-by__label {
@@ -105,6 +116,4 @@ It was achieved with just a few style rules:
 	}
 ```
 
-<info-box>
-	To see how to customize the editor theme, read a {@link framework/theme-customization dedicated guide}.
-</info-box>
+Refer to the {@link framework/theme-customization Theme customization} guide to learn how to adjust the editor theme.

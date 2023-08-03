@@ -4,7 +4,7 @@
  */
 
 // The editor creator to use.
-import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
+import { ClassicEditor as ClassicEditorBase } from '@ckeditor/ckeditor5-editor-classic';
 // import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
 
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
@@ -31,7 +31,7 @@ import { SpecialCharacters, SpecialCharactersEssentials } from '@ckeditor/ckedit
 import { Table, TableCellProperties, TableProperties, TableToolbar, TableCaption, TableColumnResize } from '@ckeditor/ckeditor5-table';
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
-import emojiIcon from '@ckeditor/ckeditor5-build-classic/theme/icons/qyEmoji.svg';
+import emojiIcon from '../theme/icons/qyEmoji.svg';
 import { Plugin } from '@ckeditor/ckeditor5-core';
 import { ButtonView } from '@ckeditor/ckeditor5-ui';
 
