@@ -21,8 +21,13 @@ ClassicEditor
 				'imageStyle:side',
 				'|',
 				'toggleImageCaption',
-				'imageTextAlternative'
+				'imageTextAlternative',
+				'|',
+				'ckboxImageEdit'
 			]
+		},
+		ckbox: {
+			forceDemoLabel: true
 		},
 		ui: {
 			viewportOffset: {

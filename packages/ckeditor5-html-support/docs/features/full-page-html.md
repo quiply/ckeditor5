@@ -2,6 +2,7 @@
 category: features-html
 order: 50
 modified_at: 2023-05-15
+meta-title: Full page HTML | CKEditor 5 Documentation
 ---
 
 # Full page HTML
@@ -45,7 +46,7 @@ ClassicEditor
 
 Here are some examples of the HTML elements you can enable with this plugin:
 
-* The HTML doctype preamble: `<!DOCTYPE html>`
+* The HTML DOCTYPE preamble: `<!DOCTYPE html>`
 * The HTML root element: `<html>`
 * The head element: `<head>`
 * The document's title: `<title>`

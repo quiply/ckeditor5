@@ -11,15 +11,20 @@ ClassicEditor
 			CKEditorPlugins.TableColumnResize, CKEditorPlugins.TableProperties, CKEditorPlugins.TableCaption, CKEditorPlugins.Superscript
 		],
 		table: {
-			contentToolbar: [ 'toggleTableCaption', 'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties' ]
+			contentToolbar: [ 'toggleTableCaption', 'tableRow', 'mergeTableCells', 'tableProperties' ]
 		},
 		image: {
 			toolbar: [
 				'imageStyle:block',
 				'imageStyle:side',
 				'|',
-				'imageTextAlternative'
+				'imageTextAlternative',
+				'|',
+				'ckboxImageEdit'
 			]
+		},
+		ckbox: {
+			forceDemoLabel: true
 		},
 		ui: {
 			viewportOffset: {

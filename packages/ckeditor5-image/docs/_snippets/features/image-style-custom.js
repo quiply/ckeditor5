@@ -15,6 +15,9 @@ import sideIcon from '@ckeditor/ckeditor5-image/docs/assets/img/icons/side.svg';
 ClassicEditor
 	.create( document.querySelector( '#snippet-image-semantical-style-custom' ), {
 		removePlugins: [ 'ImageResize' ],
+		ckbox: {
+			forceDemoLabel: true
+		},
 		ui: {
 			viewportOffset: {
 				top: window.getViewportTopOffsetConfig()
@@ -26,7 +29,7 @@ ClassicEditor
 				'undo', 'redo',
 				'|', 'heading',
 				'|', 'bold', 'italic',
-				'|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed',
+				'|', 'link', 'insertImage', 'insertTable', 'mediaEmbed',
 				'|', 'bulletedList', 'numberedList', 'outdent', 'indent'
 			]
 		},
@@ -70,7 +73,7 @@ ClassicEditor
 				title: 'Style',
 				items: [ 'imageStyle:block', 'imageStyle:side' ],
 				defaultItem: 'imageStyle:block'
-			}, '|', 'toggleImageCaption', 'linkImage'
+			}, '|', 'toggleImageCaption', 'linkImage', '|', 'ckboxImageEdit'
 			]
 		}
 	} )

@@ -188,6 +188,10 @@ export default class DowncastDispatcher extends EmitterMixin() {
 			}
 		}
 
+		// Remove mappings for all removed view elements.
+		// Remove these mappings as soon as they are not needed (https://github.com/ckeditor/ckeditor5/issues/15411).
+		conversionApi.mapper.flushDeferredBindings();
+
 		for ( const markerName of conversionApi.mapper.flushUnboundMarkerNames() ) {
 			const markerRange = markers.get( markerName )!.getRange();
 
@@ -199,9 +203,6 @@ export default class DowncastDispatcher extends EmitterMixin() {
 		for ( const change of differ.getMarkersToAdd() ) {
 			this._convertMarkerAdd( change.name, change.range, conversionApi );
 		}
-
-		// Remove mappings for all removed view elements.
-		conversionApi.mapper.flushDeferredBindings();
 
 		// Verify if all insert consumables were consumed.
 		conversionApi.consumable.verifyAllConsumed( 'insert' );
@@ -331,7 +332,7 @@ export default class DowncastDispatcher extends EmitterMixin() {
 	): void {
 		if ( !options.doNotAddConsumables ) {
 			// Collect a list of things that can be consumed, consisting of nodes and their attributes.
-			this._addConsumablesForInsert( conversionApi.consumable, Array.from( range ) );
+			this._addConsumablesForInsert( conversionApi.consumable, range );
 		}
 
 		// Fire a separate insert event for each node and text fragment contained in the range.

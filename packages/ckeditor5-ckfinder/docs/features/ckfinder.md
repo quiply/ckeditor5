@@ -1,8 +1,8 @@
 ---
 category: features-file-management
 menu-title: CKFinder
-meta-title: CKFinder file manager in CKEditor&nbsp;5
-meta-description: Learn all about using the CKFinder file manager and service with CKEditor&nbsp;5
+meta-title: CKFinder file manager | CKEditor 5 Documentation
+meta-description: Learn all about using the CKFinder file manager and service with CKEditor 5
 order: 20
 badges: [ premium ]
 ---
@@ -28,7 +28,7 @@ The CKFinder feature lets you insert images and links to files into your content
 This demo shows the integration where the file manager's server connector handles [image upload](#configuring-the-image-upload-only) only:
 
 * Paste an image directly into the editor, and it will be automatically uploaded using the server-side connector.
-* Use the insert image button {@icon @ckeditor/ckeditor5-core/theme/icons/image.svg Image} in the toolbar to insert an image.
+* Use the insert image button {@icon @ckeditor/ckeditor5-core/theme/icons/image-upload.svg Image} in the toolbar to insert an image.
 
 {@snippet features/ckfinder-upload-only}
 
@@ -228,7 +228,7 @@ Additionally, in the "image upload only" integration, you can use the following 
 * The `'uploadImage'` command implemented by the {@link module:image/imageupload/uploadimagecommand~UploadImageCommand}
 
 <info-box>
-	We recommend using the official {@link framework/development-tools#ckeditor-5-inspector CKEditor&nbsp;5 inspector} for development and debugging. It will give you tons of useful information about the state of the editor such as internal data structures, selection, commands, and many more.
+	We recommend using the official {@link framework/development-tools/inspector CKEditor&nbsp;5 inspector} for development and debugging. It will give you tons of useful information about the state of the editor such as internal data structures, selection, commands, and many more.
 </info-box>
 
 ## What's next?

@@ -9,21 +9,33 @@ import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud
 
 ClassicEditor
 	.create( document.querySelector( '#snippet-image-insert-via-pasting-url-into-editor' ), {
-		removePlugins: [ 'ArticlePluginSet', 'ImageToolbar', 'ImageCaption', 'ImageStyle', 'ImageResize', 'LinkImage' ],
+		removePlugins: [ 'ArticlePluginSet', 'ImageCaption', 'LinkImage' ],
 		cloudServices: CS_CONFIG,
 		toolbar: {
 			items: [
 				'undo', 'redo',
 				'|', 'heading',
 				'|', 'bold', 'italic',
-				'|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed',
+				'|', 'link', 'insertImage', 'insertTable', 'mediaEmbed',
 				'|', 'bulletedList', 'numberedList', 'outdent', 'indent'
 			]
+		},
+		ckbox: {
+			forceDemoLabel: true
 		},
 		ui: {
 			viewportOffset: {
 				top: window.getViewportTopOffsetConfig()
 			}
+		},
+		image: {
+			toolbar: [
+				'imageStyle:inline',
+				'imageStyle:wrapText',
+				'imageStyle:breakText',
+				'|',
+				'ckboxImageEdit'
+			]
 		}
 	} )
 	.then( editor => {

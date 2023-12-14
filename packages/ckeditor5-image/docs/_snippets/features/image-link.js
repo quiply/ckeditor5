@@ -15,9 +15,12 @@ ClassicEditor
 				'undo', 'redo',
 				'|', 'heading',
 				'|', 'bold', 'italic',
-				'|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed',
+				'|', 'link', 'insertImage', 'insertTable', 'mediaEmbed',
 				'|', 'bulletedList', 'numberedList', 'outdent', 'indent'
 			]
+		},
+		ckbox: {
+			forceDemoLabel: true
 		},
 		ui: {
 			viewportOffset: {
@@ -30,7 +33,9 @@ ClassicEditor
 				'|',
 				'imageStyle:inline',
 				'imageStyle:block',
-				'imageStyle:side'
+				'imageStyle:side',
+				'|',
+				'ckboxImageEdit'
 			]
 		},
 		cloudServices: CS_CONFIG

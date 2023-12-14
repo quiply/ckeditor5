@@ -16,10 +16,11 @@ import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
 import { Bold, Italic } from '@ckeditor/ckeditor5-basic-styles';
 import { BlockQuote } from '@ckeditor/ckeditor5-block-quote';
-import { CKBox } from '@ckeditor/ckeditor5-ckbox';
+import { CKBox, CKBoxImageEdit } from '@ckeditor/ckeditor5-ckbox';
 import { Heading } from '@ckeditor/ckeditor5-heading';
 import {
 	Image,
+	ImageInsert,
 	ImageCaption,
 	ImageStyle,
 	ImageToolbar,
@@ -44,7 +45,7 @@ import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
 //
 
 import {
-	DragDropExperimental,
+	DragDrop,
 	DragDropBlockToolbar
 } from '@ckeditor/ckeditor5-clipboard';
 import { BlockToolbar } from '@ckeditor/ckeditor5-ui';
@@ -58,9 +59,11 @@ const defaultPlugins = [
 	Italic,
 	BlockQuote,
 	CKBox,
+	CKBoxImageEdit,
 	CloudServices,
 	Heading,
 	Image,
+	ImageInsert,
 	ImageCaption,
 	ImageStyle,
 	ImageToolbar,
@@ -92,7 +95,7 @@ const defaultToolbar = {
 		'italic',
 		'|',
 		'link',
-		'uploadImage',
+		'insertImage',
 		'insertTable',
 		'mediaEmbed',
 		'horizontalLine',
@@ -113,11 +116,16 @@ const defaultConfig = {
 			'imageStyle:side',
 			'|',
 			'toggleImageCaption',
-			'imageTextAlternative'
+			'imageTextAlternative',
+			'|',
+			'ckboxImageEdit'
 		]
 	},
 	table: {
 		contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
+	},
+	ckbox: {
+		forceDemoLabel: true
 	},
 	ui: {
 		viewportOffset: {
@@ -141,14 +149,14 @@ ClassicEditor.defaultConfig = defaultConfig;
 class ClassicEditorExperimental extends ClassicEditorBase {}
 ClassicEditorExperimental.builtinPlugins = [
 	...defaultPlugins,
-	DragDropExperimental
+	DragDrop
 ];
 ClassicEditorExperimental.defaultConfig = defaultConfig;
 
 class BalloonEditorExperimental extends BalloonEditorBase {}
 BalloonEditorExperimental.builtinPlugins = [
 	...defaultPlugins,
-	DragDropExperimental,
+	DragDrop,
 	DragDropBlockToolbar,
 	BlockToolbar
 ];

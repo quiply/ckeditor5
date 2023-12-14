@@ -14,10 +14,19 @@ ClassicEditor
 			items: [
 				'undo', 'redo', '|', 'heading',
 				'|', 'bold', 'italic',
-				'|', 'link', 'uploadImage', 'insertTable', 'mediaEmbed', 'highlight:yellowMarker', 'highlight:greenMarker',
+				'|', 'link', 'insertImage', 'insertTable', 'mediaEmbed', 'highlight:yellowMarker', 'highlight:greenMarker',
 				'highlight:pinkMarker', 'highlight:greenPen', 'highlight:redPen', 'removeHighlight',
 				'|', 'bulletedList', 'numberedList', 'outdent', 'indent'
 			]
+		},
+		image: {
+			toolbar: [
+				'imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|',
+				'toggleImageCaption', 'imageTextAlternative', 'ckboxImageEdit'
+			]
+		},
+		ckbox: {
+			forceDemoLabel: true
 		},
 		ui: {
 			viewportOffset: {

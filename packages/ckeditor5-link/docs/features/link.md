@@ -1,11 +1,12 @@
 ---
 title: Link
+meta-title: Links | CKEditor 5 Documentation
 category: features
 ---
 
 {@snippet features/build-link-source}
 
-The link feature lets you insert hyperlinks into your content and provides a UI to create and edit them. Thanks to the [autolink](#autolink-feature) plugin, typed or pasted URLs and e-mail addresses automatically turn into working links.
+The link feature lets you insert hyperlinks into your content and provides a UI to create and edit them. Thanks to the [autolink](#autolink-feature) plugin, typed or pasted URLs and email addresses automatically turn into working links.
 
 ## Demo
 
@@ -317,7 +318,7 @@ The package provides a plugin for {@link module:link/linkimage~LinkImage linking
 Links are represented in the {@link module:engine/model/model~Model model} using the `linkHref` attribute. [Manual link decorators](#adding-attributes-to-links-using-the-ui-manual-decorators) are represented in the model using text attributes corresponding to their names, as configured in {@link module:link/linkconfig~LinkConfig#decorators `config.link.decorators`}.
 
 <info-box>
-	We recommend using the official {@link framework/development-tools#ckeditor-5-inspector CKEditor&nbsp;5 inspector} for development and debugging. It will give you tons of useful information about the state of the editor such as internal data structures, selection, commands, and many more.
+	We recommend using the official {@link framework/development-tools/inspector CKEditor&nbsp;5 inspector} for development and debugging. It will give you tons of useful information about the state of the editor such as internal data structures, selection, commands, and many more.
 </info-box>
 
 ## Contribute

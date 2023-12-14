@@ -1,7 +1,7 @@
 ---
 category: features-images
 menu-title: Responsive images
-meta-title: Responsive images in CKEditor&nbsp;5
+meta-title: Responsive images | CKEditor 5 Documentation
 meta-description: Learn how responsive images can make your content better.
 order: 55
 modified_at: 2023-06-30
@@ -21,7 +21,6 @@ Observe the responsive image in the demo. You can also add another one with the 
 <info-box info>
 	This demo only presents a limited set of features. Visit the {@link examples/builds/full-featured-editor feature-rich editor example} to see more in action.
 </info-box>
-
 
 ## Why responsive images?
 
@@ -74,7 +73,6 @@ Regardless of the original file format, the responsive versions will be served a
 </info-box>
 
 For detailed information on how to configure and use CKBox, please refer to the {@link features/ckbox#installation CKBox file manager} installation guide.
-
 
 ## Contribute
 
