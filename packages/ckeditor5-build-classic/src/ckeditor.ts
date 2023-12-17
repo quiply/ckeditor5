@@ -7,6 +7,7 @@
 import { ClassicEditor as ClassicEditorBase } from '@ckeditor/ckeditor5-editor-classic';
 // import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
 
+import { AIAssistant, OpenAITextAdapter } from '@ckeditor/ckeditor5-ai';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { AutoImage, Image, ImageCaption, ImageInsert, ImageResize, ImageStyle, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
@@ -61,6 +62,8 @@ class QyEmojiPlugin extends Plugin {
 
 export default class ClassicEditor extends ClassicEditorBase {
 	public static override builtinPlugins = [
+		AIAssistant,
+		OpenAITextAdapter,
 		Alignment,
 		AutoImage,
 		Autoformat,
