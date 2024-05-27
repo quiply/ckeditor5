@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -11,7 +11,7 @@
 
 // Importing types for this package is problematic, so it's omitted.
 // @ts-ignore
-import TurndownService from 'turndown';
+import TurndownService from 'turndown/lib/turndown.browser.es.js';
 
 // There no avaialble types for 'turndown-plugin-gfm' module and it's not worth to generate them on our own.
 // @ts-ignore

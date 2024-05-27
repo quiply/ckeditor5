@@ -1,4 +1,4 @@
-# Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+# Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
 #
 #                                     !!! IMPORTANT !!!
 #
@@ -135,11 +135,11 @@ msgstr "\"Top\" com seta para cima em cima"
 
 msgctxt "A label for the \"dollar sign\" symbol."
 msgid "Dollar sign"
-msgstr "Cifrão"
+msgstr "Sinal de Dólar"
 
 msgctxt "A label for the \"euro sign\" symbol."
 msgid "Euro sign"
-msgstr "Sinal de euro"
+msgstr "Sinal de Euro"
 
 msgctxt "A label for the \"yen sign\" symbol."
 msgid "Yen sign"

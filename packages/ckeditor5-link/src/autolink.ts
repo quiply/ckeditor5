@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -7,15 +7,14 @@
  * @module link/autolink
  */
 
-import { Plugin } from 'ckeditor5/src/core';
+import { Plugin } from 'ckeditor5/src/core.js';
+import type { ClipboardInputTransformationData } from 'ckeditor5/src/clipboard.js';
+import type { DocumentSelectionChangeEvent, Element, Model, Position, Range, Writer } from 'ckeditor5/src/engine.js';
+import { Delete, TextWatcher, getLastTextLine, findAttributeRange, type TextWatcherMatchedDataEvent } from 'ckeditor5/src/typing.js';
+import type { EnterCommand, ShiftEnterCommand } from 'ckeditor5/src/enter.js';
 
-import type { ClipboardInputTransformationData } from 'ckeditor5/src/clipboard';
-import type { DocumentSelectionChangeEvent, Element, Model, Position, Range, Writer } from 'ckeditor5/src/engine';
-import { Delete, TextWatcher, getLastTextLine, findAttributeRange, type TextWatcherMatchedDataEvent } from 'ckeditor5/src/typing';
-import type { EnterCommand, ShiftEnterCommand } from 'ckeditor5/src/enter';
-
-import { addLinkProtocolIfApplicable, linkHasProtocol } from './utils';
-import LinkEditing from './linkediting';
+import { addLinkProtocolIfApplicable, linkHasProtocol } from './utils.js';
+import LinkEditing from './linkediting.js';
 
 const MIN_LINK_LENGTH_WITH_SPACE_AT_END = 4; // Ie: "t.co " (length 5).
 
@@ -155,7 +154,7 @@ export default class AutoLink extends Plugin {
 		const linkCommand = editor.commands.get( 'link' )!;
 
 		clipboardPipeline.on( 'inputTransformation', ( evt, data: ClipboardInputTransformationData ) => {
-			if ( !this.isEnabled || !linkCommand.isEnabled || selection.isCollapsed ) {
+			if ( !this.isEnabled || !linkCommand.isEnabled || selection.isCollapsed || data.method !== 'paste' ) {
 				// Abort if we are disabled or the selection is collapsed.
 				return;
 			}

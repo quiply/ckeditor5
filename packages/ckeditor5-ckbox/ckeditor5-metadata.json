@@ -9,7 +9,10 @@
 			"requires": [
 				"CloudServices",
 				"Link",
-				"Image",
+				[
+					"ImageBlock",
+					"ImageInline"
+				],
 				"ImageUpload",
 				"PictureEditing"
 			],
@@ -17,7 +20,7 @@
 				{
 					"name": "ckbox",
 					"type": "Button",
-					"iconPath": "theme/icons/browse-files.svg"
+					"iconPath": "@ckeditor/ckeditor5-core/theme/icons/browse-files.svg"
 				}
 			],
 			"htmlOutput": [

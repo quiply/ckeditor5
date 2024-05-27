@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -10,12 +10,12 @@
 import {
 	Plugin,
 	type Editor
-} from 'ckeditor5/src/core';
+} from 'ckeditor5/src/core.js';
 import {
 	logWarning,
 	type Locale,
 	type Observable
-} from 'ckeditor5/src/utils';
+} from 'ckeditor5/src/utils.js';
 import {
 	createDropdown,
 	SplitButtonView,
@@ -23,10 +23,10 @@ import {
 	type DropdownButtonView,
 	type DropdownView,
 	type FocusableView
-} from 'ckeditor5/src/ui';
+} from 'ckeditor5/src/ui.js';
 
-import ImageInsertFormView from './ui/imageinsertformview';
-import ImageUtils from '../imageutils';
+import ImageInsertFormView from './ui/imageinsertformview.js';
+import ImageUtils from '../imageutils.js';
 
 /**
  * The image insert dropdown plugin.
@@ -114,11 +114,11 @@ export default class ImageInsertUI extends Plugin {
 		requiresForm
 	}: {
 		name: string;
-		observable: Observable & { isEnabled: boolean };
+		observable: Observable & { isEnabled: boolean } | ( () => Observable & { isEnabled: boolean } );
 		buttonViewCreator: ( isOnlyOne: boolean ) => ButtonView;
 		formViewCreator: ( isOnlyOne: boolean ) => FocusableView;
 		requiresForm?: boolean;
-} ): void {
+	} ): void {
 		if ( this._integrations.has( name ) ) {
 			/**
 			 * There are two insert-image integrations registered with the same name.
@@ -174,7 +174,7 @@ export default class ImageInsertUI extends Plugin {
 		}
 
 		const dropdownView = this.dropdownView = createDropdown( locale, dropdownButton );
-		const observables = integrations.map( ( { observable } ) => observable );
+		const observables = integrations.map( ( { observable } ) => typeof observable == 'function' ? observable() : observable );
 
 		dropdownView.bind( 'isEnabled' ).toMany( observables, 'isEnabled', ( ...isEnabled ) => (
 			isEnabled.some( isEnabled => isEnabled )
@@ -250,7 +250,7 @@ export default class ImageInsertUI extends Plugin {
 }
 
 type IntegrationData = {
-	observable: Observable & { isEnabled: boolean };
+	observable: Observable & { isEnabled: boolean } | ( () => Observable & { isEnabled: boolean } );
 	buttonViewCreator: ( isOnlyOne: boolean ) => ButtonView;
 	formViewCreator: ( isOnlyOne: boolean ) => FocusableView;
 	requiresForm: boolean;

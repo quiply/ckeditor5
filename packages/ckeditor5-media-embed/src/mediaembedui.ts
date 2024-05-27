@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -7,15 +7,15 @@
  * @module media-embed/mediaembedui
  */
 
-import { Plugin } from 'ckeditor5/src/core';
-import { createDropdown, CssTransitionDisablerMixin, type DropdownView } from 'ckeditor5/src/ui';
+import { Plugin } from 'ckeditor5/src/core.js';
+import { createDropdown, CssTransitionDisablerMixin, type DropdownView } from 'ckeditor5/src/ui.js';
 
-import MediaFormView from './ui/mediaformview';
-import MediaEmbedEditing from './mediaembedediting';
+import MediaFormView from './ui/mediaformview.js';
+import MediaEmbedEditing from './mediaembedediting.js';
 import mediaIcon from '../theme/icons/media.svg';
-import type MediaEmbedCommand from './mediaembedcommand';
-import type { LocaleTranslate } from 'ckeditor5/src/utils';
-import type MediaRegistry from './mediaregistry';
+import type MediaEmbedCommand from './mediaembedcommand.js';
+import type { LocaleTranslate } from 'ckeditor5/src/utils.js';
+import type MediaRegistry from './mediaregistry.js';
 
 /**
  * The media embed UI plugin.
@@ -92,6 +92,11 @@ export default class MediaEmbedUI extends Plugin {
 
 			form.delegate( 'submit', 'cancel' ).to( dropdown );
 			form.urlInputView.fieldView.bind( 'value' ).to( command, 'value' );
+
+			// Update balloon position when form error changes.
+			form.urlInputView.on( 'change:errorText', () => {
+				editor.ui.update();
+			} );
 
 			// Form elements should be read-only when corresponding commands are disabled.
 			form.urlInputView.bind( 'isEnabled' ).to( command, 'isEnabled' );

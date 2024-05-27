@@ -1,37 +1,39 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 /* global document, window, Event */
 
-import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import MultiRootEditor from '@ckeditor/ckeditor5-editor-multi-root/src/multirooteditor';
+import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor.js';
+import MultiRootEditor from '@ckeditor/ckeditor5-editor-multi-root/src/multirooteditor.js';
 
-import EditorUI from '../../../src/editorui/editorui';
-import BlockToolbar from '../../../src/toolbar/block/blocktoolbar';
-import ToolbarView from '../../../src/toolbar/toolbarview';
-import BalloonPanelView from '../../../src/panel/balloon/balloonpanelview';
-import BlockButtonView from '../../../src/toolbar/block/blockbuttonview';
+import EditorUI from '../../../src/editorui/editorui.js';
+import BlockToolbar from '../../../src/toolbar/block/blocktoolbar.js';
+import ToolbarView from '../../../src/toolbar/toolbarview.js';
+import BalloonPanelView from '../../../src/panel/balloon/balloonpanelview.js';
+import BlockButtonView from '../../../src/toolbar/block/blockbuttonview.js';
+import ButtonView from '../../../src/button/buttonview.js';
 
-import Heading from '@ckeditor/ckeditor5-heading/src/heading';
-import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui';
+import Heading from '@ckeditor/ckeditor5-heading/src/heading.js';
+import HeadingButtonsUI from '@ckeditor/ckeditor5-heading/src/headingbuttonsui.js';
 import { Paragraph, ParagraphButtonUI } from '@ckeditor/ckeditor5-paragraph';
-import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote';
-import Image from '@ckeditor/ckeditor5-image/src/image';
-import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption';
-import global from '@ckeditor/ckeditor5-utils/src/dom/global';
-import ResizeObserver from '@ckeditor/ckeditor5-utils/src/dom/resizeobserver';
-import DragDropBlockToolbar from '@ckeditor/ckeditor5-clipboard/src/dragdropblocktoolbar';
+import BlockQuote from '@ckeditor/ckeditor5-block-quote/src/blockquote.js';
+import Image from '@ckeditor/ckeditor5-image/src/image.js';
+import ImageCaption from '@ckeditor/ckeditor5-image/src/imagecaption.js';
+import global from '@ckeditor/ckeditor5-utils/src/dom/global.js';
+import ResizeObserver from '@ckeditor/ckeditor5-utils/src/dom/resizeobserver.js';
+import DragDropBlockToolbar from '@ckeditor/ckeditor5-clipboard/src/dragdropblocktoolbar.js';
+import Plugin from '@ckeditor/ckeditor5-core/src/plugin.js';
 
-import { setData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { keyCodes } from '@ckeditor/ckeditor5-utils/src/keyboard';
-import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import { setData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model.js';
+import { keyCodes } from '@ckeditor/ckeditor5-utils/src/keyboard.js';
+import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils.js';
 
 import { icons } from '@ckeditor/ckeditor5-core';
 
-import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect';
-import env from '@ckeditor/ckeditor5-utils/src/env';
+import Rect from '@ckeditor/ckeditor5-utils/src/dom/rect.js';
+import env from '@ckeditor/ckeditor5-utils/src/env.js';
 
 const { dragIndicator, pilcrow } = icons;
 
@@ -949,6 +951,36 @@ describe( 'BlockToolbar', () => {
 			elBar.remove();
 
 			return multiRootEditor.destroy();
+		} );
+	} );
+
+	describe( 'BlockToolbar plugin load order', () => {
+		it( 'should add a button registered in the afterInit of Foo when BlockToolbar is loaded before Foo', () => {
+			class Foo extends Plugin {
+				afterInit() {
+					this.editor.ui.componentFactory.add( 'foo', () => {
+						const button = new ButtonView();
+
+						button.set( { label: 'Foo' } );
+
+						return button;
+					} );
+				}
+			}
+
+			return ClassicTestEditor
+				.create( element, {
+					plugins: [ BlockToolbar, Foo ],
+					blockToolbar: [ 'foo' ]
+				} )
+				.then( editor => {
+					const items = editor.plugins.get( BlockToolbar ).toolbarView.items;
+
+					expect( items.length ).to.equal( 1 );
+					expect( items.first.label ).to.equal( 'Foo' );
+
+					return editor.destroy();
+				} );
 		} );
 	} );
 } );

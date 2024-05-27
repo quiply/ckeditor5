@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -10,11 +10,10 @@
 import {
 	Editor,
 	Context,
-	DataApiMixin,
 	secureSourceElement,
 	type EditorConfig,
 	type EditorReadyEvent
-} from 'ckeditor5/src/core';
+} from 'ckeditor5/src/core.js';
 
 import {
 	CKEditorError,
@@ -23,12 +22,12 @@ import {
 	logWarning,
 	type CollectionAddEvent,
 	type DecoratedMethodEvent
-} from 'ckeditor5/src/utils';
+} from 'ckeditor5/src/utils.js';
 
-import { ContextWatchdog, EditorWatchdog } from 'ckeditor5/src/watchdog';
+import { ContextWatchdog, EditorWatchdog } from 'ckeditor5/src/watchdog.js';
 
-import MultiRootEditorUI from './multirooteditorui';
-import MultiRootEditorUIView from './multirooteditoruiview';
+import MultiRootEditorUI from './multirooteditorui.js';
+import MultiRootEditorUIView from './multirooteditoruiview.js';
 
 import { isElement as _isElement } from 'lodash-es';
 import {
@@ -36,7 +35,7 @@ import {
 	type ViewRootEditableElement,
 	type Writer,
 	type ModelCanEditAtEvent
-} from 'ckeditor5/src/engine';
+} from 'ckeditor5/src/engine.js';
 
 /**
  * The {@glink installation/getting-started/predefined-builds#multi-root-editor multi-root editor} implementation.
@@ -68,7 +67,7 @@ import {
  * Read more about initializing the editor from source or as a build in
  * {@link module:editor-multi-root/multirooteditor~MultiRootEditor.create `MultiRootEditor.create()`}.
  */
-export default class MultiRootEditor extends DataApiMixin( Editor ) {
+export default class MultiRootEditor extends Editor {
 	/**
 	 * @inheritDoc
 	 */

@@ -1,40 +1,41 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
-/* globals window, setTimeout, atob, URL, Blob, HTMLCanvasElement, console */
+/* globals window, setTimeout, atob, URL, Blob, HTMLCanvasElement, console, document */
 
-import VirtualTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/virtualtesteditor';
+import VirtualTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/virtualtesteditor.js';
+import ClassicEditor from '@ckeditor/ckeditor5-editor-classic/src/classiceditor.js';
 
-import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
-import ClipboardPipeline from '@ckeditor/ckeditor5-clipboard/src/clipboardpipeline';
-import ImageBlockEditing from '../../src/image/imageblockediting';
-import ImageInlineEditing from '../../src/image/imageinlineediting';
-import ImageUploadEditing from '../../src/imageupload/imageuploadediting';
-import UploadImageCommand from '../../src/imageupload/uploadimagecommand';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import UndoEditing from '@ckeditor/ckeditor5-undo/src/undoediting';
-import DataTransfer from '@ckeditor/ckeditor5-engine/src/view/datatransfer';
-import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo';
-import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import Plugin from '@ckeditor/ckeditor5-core/src/plugin.js';
+import ClipboardPipeline from '@ckeditor/ckeditor5-clipboard/src/clipboardpipeline.js';
+import ImageBlockEditing from '../../src/image/imageblockediting.js';
+import ImageInlineEditing from '../../src/image/imageinlineediting.js';
+import ImageUploadEditing from '../../src/imageupload/imageuploadediting.js';
+import UploadImageCommand from '../../src/imageupload/uploadimagecommand.js';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
+import UndoEditing from '@ckeditor/ckeditor5-undo/src/undoediting.js';
+import DataTransfer from '@ckeditor/ckeditor5-engine/src/view/datatransfer.js';
+import EventInfo from '@ckeditor/ckeditor5-utils/src/eventinfo.js';
+import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils.js';
 
-import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository';
-import { UploadAdapterMock, createNativeFileMock, NativeFileReaderMock } from '@ckeditor/ckeditor5-upload/tests/_utils/mocks';
+import FileRepository from '@ckeditor/ckeditor5-upload/src/filerepository.js';
+import { UploadAdapterMock, createNativeFileMock, NativeFileReaderMock } from '@ckeditor/ckeditor5-upload/tests/_utils/mocks.js';
 
-import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import { getData as getViewData, stringify as stringifyView } from '@ckeditor/ckeditor5-engine/src/dev-utils/view';
+import { setData as setModelData, getData as getModelData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model.js';
+import { getData as getViewData, stringify as stringifyView } from '@ckeditor/ckeditor5-engine/src/dev-utils/view.js';
 
-import Notification from '@ckeditor/ckeditor5-ui/src/notification/notification';
-import { downcastImageAttribute } from '../../src/image/converters';
-import { assertCKEditorError } from '@ckeditor/ckeditor5-utils/tests/_utils/utils';
+import Notification from '@ckeditor/ckeditor5-ui/src/notification/notification.js';
+import { downcastImageAttribute } from '../../src/image/converters.js';
+import { assertCKEditorError } from '@ckeditor/ckeditor5-utils/tests/_utils/utils.js';
 
 describe( 'ImageUploadEditing', () => {
 	// eslint-disable-next-line max-len
 	const base64Sample = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=';
 
 	let adapterMocks = [];
-	let editor, model, view, doc, fileRepository, viewDocument, nativeReaderMock, loader;
+	let editor, editorElement, model, view, doc, fileRepository, viewDocument, nativeReaderMock, loader;
 
 	testUtils.createSinonSandbox();
 
@@ -53,14 +54,18 @@ describe( 'ImageUploadEditing', () => {
 	}
 
 	beforeEach( () => {
+		editorElement = document.createElement( 'div' );
+
+		document.body.appendChild( editorElement );
+
 		sinon.stub( window, 'FileReader' ).callsFake( () => {
 			nativeReaderMock = new NativeFileReaderMock();
 
 			return nativeReaderMock;
 		} );
 
-		return VirtualTestEditor
-			.create( {
+		return ClassicEditor
+			.create( editorElement, {
 				plugins: [
 					ImageBlockEditing, ImageInlineEditing, ImageUploadEditing,
 					Paragraph, UndoEditing, UploadAdapterPluginMock, ClipboardPipeline
@@ -80,6 +85,7 @@ describe( 'ImageUploadEditing', () => {
 	} );
 
 	afterEach( () => {
+		editorElement.remove();
 		sinon.restore();
 		adapterMocks = [];
 
@@ -1340,6 +1346,77 @@ describe( 'ImageUploadEditing', () => {
 				done();
 			} );
 		} );
+	} );
+
+	describe( 'accessibility', () => {
+		let announcerSpy;
+
+		beforeEach( async () => {
+			announcerSpy = sinon.spy( editor.ui.ariaLiveAnnouncer, 'announce' );
+		} );
+
+		it( 'should announce error in aria live', done => {
+			const notification = editor.plugins.get( Notification );
+			const file = createNativeFileMock();
+
+			notification.on( 'show:warning', evt => {
+				tryExpect( done, () => {
+					expectAnnounce( 'Error during image upload' );
+					evt.stop();
+				} );
+			}, { priority: 'high' } );
+
+			setModelData( model, '<paragraph>{}foo bar</paragraph>' );
+			editor.execute( 'uploadImage', { file } );
+
+			loader.file.then( () => nativeReaderMock.mockError( 'Reading error.' ) );
+		} );
+
+		it( 'should announce uploading image in aria live', done => {
+			const file = createNativeFileMock();
+			setModelData( model, '<paragraph>{}foo bar</paragraph>' );
+			editor.execute( 'uploadImage', { file } );
+
+			model.document.once( 'change', () => {
+				tryExpect( done, () => {
+					expectAnnounce( 'Uploading image' );
+				} );
+			} );
+
+			expect( loader.status ).to.equal( 'reading' );
+
+			loader.file.then( () => nativeReaderMock.mockSuccess( base64Sample ) );
+		} );
+
+		it( 'should allow modifying the image element once the original image is uploaded', async () => {
+			const file = createNativeFileMock();
+			setModelData( model, '<paragraph>[]foo bar</paragraph>' );
+
+			const imageUploadEditing = editor.plugins.get( 'ImageUploadEditing' );
+			const uploadCompleteSpy = sinon.spy();
+
+			imageUploadEditing.on( 'uploadComplete', uploadCompleteSpy );
+
+			editor.execute( 'uploadImage', { file } );
+
+			await new Promise( res => {
+				model.document.once( 'change', res );
+				loader.file.then( () => nativeReaderMock.mockSuccess( base64Sample ) );
+			} );
+
+			sinon.assert.notCalled( uploadCompleteSpy );
+
+			await new Promise( res => {
+				model.document.once( 'change', res, { priority: 'lowest' } );
+				loader.file.then( () => adapterMocks[ 0 ].mockSuccess( { default: 'image.png' } ) );
+			} );
+
+			expectAnnounce( 'Image upload complete' );
+		} );
+
+		function expectAnnounce( message ) {
+			expect( announcerSpy ).to.be.calledWithExactly( message );
+		}
 	} );
 
 	describe( 'fallback image conversion on canvas', () => {

@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -9,16 +9,17 @@
 
 import {
 	type Editor
-} from 'ckeditor5/src/core';
+} from 'ckeditor5/src/core.js';
 
 import {
 	EditorUI,
-	type EditorUIReadyEvent
-} from 'ckeditor5/src/ui';
+	type EditorUIReadyEvent,
+	_initMenuBar
+} from 'ckeditor5/src/ui.js';
 
-import { enablePlaceholder } from 'ckeditor5/src/engine';
+import { enablePlaceholder } from 'ckeditor5/src/engine.js';
 
-import type DecoupledEditorUIView from './decouplededitoruiview';
+import type DecoupledEditorUIView from './decouplededitoruiview.js';
 
 /**
  * The decoupled editor UI class.
@@ -80,6 +81,7 @@ export default class DecoupledEditorUI extends EditorUI {
 
 		this._initPlaceholder();
 		this._initToolbar();
+		_initMenuBar( editor, this.view.menuBarView );
 		this.fire<EditorUIReadyEvent>( 'ready' );
 	}
 

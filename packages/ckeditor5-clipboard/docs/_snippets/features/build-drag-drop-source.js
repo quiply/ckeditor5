@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -40,6 +40,8 @@ import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { Font } from '@ckeditor/ckeditor5-font';
 import { HorizontalLine } from '@ckeditor/ckeditor5-horizontal-line';
 
+import { TOKEN_URL } from '@ckeditor/ckeditor5-ckbox/tests/_utils/ckbox-config.js';
+
 //
 // Plugins for specific scenarios.
 //
@@ -49,7 +51,7 @@ import {
 	DragDropBlockToolbar
 } from '@ckeditor/ckeditor5-clipboard';
 import { BlockToolbar } from '@ckeditor/ckeditor5-ui';
-import { HCardEditing } from './hcard';
+import { HCardEditing } from './hcard.js';
 
 const defaultPlugins = [
 	Essentials,
@@ -113,7 +115,7 @@ const defaultConfig = {
 		toolbar: [
 			'imageStyle:inline',
 			'imageStyle:block',
-			'imageStyle:side',
+			'imageStyle:wrapText',
 			'|',
 			'toggleImageCaption',
 			'imageTextAlternative',
@@ -124,13 +126,15 @@ const defaultConfig = {
 	table: {
 		contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
 	},
-	ckbox: {
-		forceDemoLabel: true
-	},
 	ui: {
 		viewportOffset: {
 			top: window.getViewportTopOffsetConfig()
 		}
+	},
+	ckbox: {
+		tokenUrl: TOKEN_URL,
+		allowExternalImagesEditing: [ /^data:/, 'origin', /ckbox/ ],
+		forceDemoLabel: true
 	},
 	fontFamily: {
 		supportAllValues: true

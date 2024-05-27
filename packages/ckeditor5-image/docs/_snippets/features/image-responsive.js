@@ -1,11 +1,12 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 /* globals ClassicEditor, console, window, document */
 
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config.js';
+import { TOKEN_URL } from '@ckeditor/ckeditor5-ckbox/tests/_utils/ckbox-config.js';
 
 ClassicEditor
 	.create( document.querySelector( '#snippet-responsive' ), {
@@ -30,11 +31,12 @@ ClassicEditor
 				'|',
 				'imageStyle:inline',
 				'imageStyle:block',
-				'imageStyle:side',
+				'imageStyle:wrapText',
 				'|',
 				'resizeImage:100',
 				'resizeImage:200',
 				'resizeImage:original',
+				'resizeImage:custom',
 				'|',
 				'ckboxImageEdit'
 			],
@@ -43,6 +45,11 @@ ClassicEditor
 					name: 'resizeImage:original',
 					value: null,
 					icon: 'original'
+				},
+				{
+					name: 'resizeImage:custom',
+					value: 'custom',
+					icon: 'custom'
 				},
 				{
 					name: 'resizeImage:100',
@@ -65,7 +72,9 @@ ClassicEditor
 			]
 		},
 		ckbox: {
-			forceDemoLabel: true
+			tokenUrl: TOKEN_URL,
+			forceDemoLabel: true,
+			allowExternalImagesEditing: [ /^data:/, 'origin', /ckbox/ ]
 		},
 		cloudServices: CS_CONFIG
 	} )
@@ -73,7 +82,7 @@ ClassicEditor
 		window.editor = editor;
 
 		window.attachTourBalloon( {
-			target: window.findToolbarItem( editor.ui.view.toolbar, item => item.buttonView && item.buttonView.label === 'CKBox' ),
+			target: window.findToolbarItem( editor.ui.view.toolbar, item => item.buttonView && item.buttonView.label === 'Insert image' ),
 			text: 'Click here to insert an image.',
 			tippyOptions: {
 				placement: 'bottom'

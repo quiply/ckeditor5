@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -9,19 +9,19 @@
 
 /* globals Node, NodeFilter, DOMParser */
 
-import ViewText from './text';
-import ViewElement from './element';
-import ViewUIElement from './uielement';
-import ViewPosition from './position';
-import ViewRange from './range';
-import ViewSelection from './selection';
-import ViewDocumentFragment from './documentfragment';
-import ViewTreeWalker from './treewalker';
-import { default as Matcher, type MatcherPattern } from './matcher';
+import ViewText from './text.js';
+import ViewElement from './element.js';
+import ViewUIElement from './uielement.js';
+import ViewPosition from './position.js';
+import ViewRange from './range.js';
+import ViewSelection from './selection.js';
+import ViewDocumentFragment from './documentfragment.js';
+import ViewTreeWalker from './treewalker.js';
+import { default as Matcher, type MatcherPattern } from './matcher.js';
 import {
 	BR_FILLER, INLINE_FILLER_LENGTH, NBSP_FILLER, MARKED_NBSP_FILLER,
 	getDataWithoutFiller, isInlineFiller, startsWithFiller
-} from './filler';
+} from './filler.js';
 
 import {
 	global,
@@ -35,12 +35,12 @@ import {
 	env
 } from '@ckeditor/ckeditor5-utils';
 
-import type ViewNode from './node';
-import type Document from './document';
-import type DocumentSelection from './documentselection';
-import type EditableElement from './editableelement';
-import type ViewTextProxy from './textproxy';
-import type ViewRawElement from './rawelement';
+import type ViewNode from './node.js';
+import type Document from './document.js';
+import type DocumentSelection from './documentselection.js';
+import type EditableElement from './editableelement.js';
+import type ViewTextProxy from './textproxy.js';
+import type ViewRawElement from './rawelement.js';
 
 type DomNode = globalThis.Node;
 type DomElement = globalThis.HTMLElement;
@@ -460,7 +460,11 @@ export default class DomConverter {
 
 			if ( options.withChildren !== false ) {
 				for ( const child of this.viewChildrenToDom( viewElementOrFragment, options ) ) {
-					domElement.appendChild( child );
+					if ( domElement instanceof HTMLTemplateElement ) {
+						domElement.content.appendChild( child );
+					} else {
+						domElement.appendChild( child );
+					}
 				}
 			}
 
@@ -734,8 +738,17 @@ export default class DomConverter {
 		options: Parameters<DomConverter[ 'domToView' ]>[ 1 ] = {},
 		inlineNodes: Array<ViewNode> = []
 	): IterableIterator<ViewNode> {
-		for ( let i = 0; i < domElement.childNodes.length; i++ ) {
-			const domChild = domElement.childNodes[ i ];
+		// Get child nodes from content document fragment if element is template
+		let childNodes: Array<ChildNode> = [];
+
+		if ( domElement instanceof HTMLTemplateElement ) {
+			childNodes = [ ...domElement.content.childNodes ];
+		} else {
+			childNodes = [ ...domElement.childNodes ];
+		}
+
+		for ( let i = 0; i < childNodes.length; i++ ) {
+			const domChild = childNodes[ i ];
 			const generator = this._domToView( domChild, options, inlineNodes );
 
 			// Get the first yielded value or a returned value.

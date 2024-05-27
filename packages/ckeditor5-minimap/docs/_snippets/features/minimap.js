@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -9,7 +9,7 @@ import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { Subscript, Superscript } from '@ckeditor/ckeditor5-basic-styles';
 import { CloudServices } from '@ckeditor/ckeditor5-cloud-services';
 import { CodeBlock } from '@ckeditor/ckeditor5-code-block';
-import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articlepluginset';
+import ArticlePluginSet from '@ckeditor/ckeditor5-core/tests/_utils/articlepluginset.js';
 import { CKBox, CKBoxImageEdit } from '@ckeditor/ckeditor5-ckbox';
 import { DecoupledEditor } from '@ckeditor/ckeditor5-editor-decoupled';
 import { FontBackgroundColor, FontColor, FontFamily, FontSize } from '@ckeditor/ckeditor5-font';
@@ -21,6 +21,7 @@ import { TableCellProperties, TableProperties } from '@ckeditor/ckeditor5-table'
 import { Minimap } from '@ckeditor/ckeditor5-minimap';
 
 import { CS_CONFIG } from '@ckeditor/ckeditor5-cloud-services/tests/_utils/cloud-services-config.js';
+import { TOKEN_URL } from '@ckeditor/ckeditor5-ckbox/tests/_utils/ckbox-config.js';
 
 const config = {
 	plugins: [
@@ -56,7 +57,7 @@ const config = {
 		toolbar: [
 			'imageStyle:inline',
 			'imageStyle:block',
-			'imageStyle:side',
+			'imageStyle:wrapText',
 			'|',
 			'imageTextAlternative',
 			'toggleImageCaption',
@@ -90,13 +91,15 @@ const config = {
 		extraClasses: 'live-snippet formatted'
 	},
 	cloudServices: CS_CONFIG,
-	ckbox: {
-		forceDemoLabel: true
-	},
 	ui: {
 		viewportOffset: {
 			top: window.getViewportTopOffsetConfig()
 		}
+	},
+	ckbox: {
+		tokeUrl: TOKEN_URL,
+		allowExternalImagesEditing: [ /^data:/, 'origin', /ckbox/ ],
+		forceDemoLabel: true
 	}
 };
 

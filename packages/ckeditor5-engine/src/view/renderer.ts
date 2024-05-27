@@ -1,5 +1,5 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
@@ -7,9 +7,9 @@
  * @module engine/view/renderer
  */
 
-import ViewText from './text';
-import ViewPosition from './position';
-import { INLINE_FILLER, INLINE_FILLER_LENGTH, startsWithFiller, isInlineFiller } from './filler';
+import ViewText from './text.js';
+import ViewPosition from './position.js';
+import { INLINE_FILLER, INLINE_FILLER_LENGTH, startsWithFiller, isInlineFiller } from './filler.js';
 
 import {
 	CKEditorError,
@@ -22,15 +22,16 @@ import {
 	isNode,
 	isText,
 	remove,
+	indexOf,
 	type DiffResult,
 	type ObservableChangeEvent
 } from '@ckeditor/ckeditor5-utils';
 
-import type { ChangeType } from './document';
-import type DocumentSelection from './documentselection';
-import type DomConverter from './domconverter';
-import type ViewElement from './element';
-import type ViewNode from './node';
+import type { ChangeType } from './document.js';
+import type DocumentSelection from './documentselection.js';
+import type DomConverter from './domconverter.js';
+import type ViewElement from './element.js';
+import type ViewNode from './node.js';
 
 import '../../theme/renderer.css';
 
@@ -524,15 +525,15 @@ export default class Renderer extends ObservableMixin() {
 			return false;
 		}
 
-		// We have block filler, we do not need inline one.
-		if ( selectionOffset === selectionParent.getFillerOffset!() ) {
-			return false;
-		}
-
 		const nodeBefore = selectionPosition.nodeBefore;
 		const nodeAfter = selectionPosition.nodeAfter;
 
 		if ( nodeBefore instanceof ViewText || nodeAfter instanceof ViewText ) {
+			return false;
+		}
+
+		// We have block filler, we do not need inline one.
+		if ( selectionOffset === selectionParent.getFillerOffset!() && ( !nodeBefore || !nodeBefore.is( 'element', 'br' ) ) ) {
 			return false;
 		}
 
@@ -1147,15 +1148,21 @@ function sameNodes( domConverter: DomConverter, actualDomChild: DomNode, expecte
  * caret to the new line. A quick fix is as simple as force–refreshing the selection with the same range.
  */
 function fixGeckoSelectionAfterBr( focus: ReturnType<DomConverter[ 'viewPositionToDom' ]>, domSelection: DomSelection ) {
-	const parent = focus!.parent;
+	let parent = focus!.parent;
+	let offset = focus!.offset;
+
+	if ( isText( parent ) && isInlineFiller( parent ) ) {
+		offset = indexOf( parent ) + 1;
+		parent = parent.parentNode!;
+	}
 
 	// This fix works only when the focus point is at the very end of an element.
 	// There is no point in running it in cases unrelated to the browser bug.
-	if ( parent.nodeType != Node.ELEMENT_NODE || focus!.offset != parent.childNodes.length - 1 ) {
+	if ( parent.nodeType != Node.ELEMENT_NODE || offset != parent.childNodes.length - 1 ) {
 		return;
 	}
 
-	const childAtOffset = parent.childNodes[ focus!.offset ];
+	const childAtOffset = parent.childNodes[ offset ];
 
 	// To stay on the safe side, the fix being as specific as possible, it targets only the
 	// selection which is at the very end of the element and preceded by <br />.

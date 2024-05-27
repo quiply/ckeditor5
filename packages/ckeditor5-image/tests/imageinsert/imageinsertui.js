@@ -1,24 +1,24 @@
 /**
- * @license Copyright (c) 2003-2023, CKSource Holding sp. z o.o. All rights reserved.
+ * @license Copyright (c) 2003-2024, CKSource Holding sp. z o.o. All rights reserved.
  * For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
  */
 
 /* globals document, console */
 
-import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor';
-import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
-import Model from '@ckeditor/ckeditor5-ui/src/model';
-import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview';
-import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph';
-import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview';
-import SplitButtonView from '@ckeditor/ckeditor5-ui/src/dropdown/button/splitbuttonview';
+import ClassicTestEditor from '@ckeditor/ckeditor5-core/tests/_utils/classictesteditor.js';
+import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials.js';
+import Model from '@ckeditor/ckeditor5-ui/src/model.js';
+import DropdownView from '@ckeditor/ckeditor5-ui/src/dropdown/dropdownview.js';
+import Paragraph from '@ckeditor/ckeditor5-paragraph/src/paragraph.js';
+import ButtonView from '@ckeditor/ckeditor5-ui/src/button/buttonview.js';
+import SplitButtonView from '@ckeditor/ckeditor5-ui/src/dropdown/button/splitbuttonview.js';
 
-import { setData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model';
-import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils';
+import { setData } from '@ckeditor/ckeditor5-engine/src/dev-utils/model.js';
+import testUtils from '@ckeditor/ckeditor5-core/tests/_utils/utils.js';
 
-import Image from '../../src/image';
-import ImageInsertUI from '../../src/imageinsert/imageinsertui';
-import ImageInsertFormView from '../../src/imageinsert/ui/imageinsertformview';
+import Image from '../../src/image.js';
+import ImageInsertUI from '../../src/imageinsert/imageinsertui.js';
+import ImageInsertFormView from '../../src/imageinsert/ui/imageinsertformview.js';
 
 describe( 'ImageInsertUI', () => {
 	let editor, editorElement, insertImageUI;
@@ -296,6 +296,22 @@ describe( 'ImageInsertUI', () => {
 			} );
 		} );
 
+		describe( 'single integration with form view required and observalbe as a function', () => {
+			beforeEach( async () => {
+				registerUrlIntegration( true );
+			} );
+
+			it( 'should bind isEnabled state to observable', () => {
+				const dropdown = editor.ui.componentFactory.create( 'insertImage' );
+
+				observableUrl.isEnabled = false;
+				expect( dropdown.isEnabled ).to.be.false;
+
+				observableUrl.isEnabled = true;
+				expect( dropdown.isEnabled ).to.be.true;
+			} );
+		} );
+
 		describe( 'multiple integrations', () => {
 			beforeEach( async () => {
 				registerUploadIntegration();
@@ -365,12 +381,39 @@ describe( 'ImageInsertUI', () => {
 			} );
 		} );
 
-		function registerUrlIntegration() {
+		describe( 'multiple integrations and observalbe as a function', () => {
+			beforeEach( async () => {
+				registerUploadIntegration( true );
+				registerUrlIntegration( true );
+			} );
+
+			it( 'should bind isEnabled state to observables', () => {
+				const dropdown = editor.ui.componentFactory.create( 'insertImage' );
+
+				observableUrl.isEnabled = false;
+				observableUpload.isEnabled = false;
+				expect( dropdown.isEnabled ).to.be.false;
+
+				observableUrl.isEnabled = true;
+				observableUpload.isEnabled = false;
+				expect( dropdown.isEnabled ).to.be.true;
+
+				observableUrl.isEnabled = false;
+				observableUpload.isEnabled = true;
+				expect( dropdown.isEnabled ).to.be.true;
+
+				observableUrl.isEnabled = true;
+				observableUpload.isEnabled = true;
+				expect( dropdown.isEnabled ).to.be.true;
+			} );
+		} );
+
+		function registerUrlIntegration( observableAsFunc ) {
 			observableUrl = new Model( { isEnabled: true } );
 
 			insertImageUI.registerIntegration( {
 				name: 'url',
-				observable: observableUrl,
+				observable: observableAsFunc ? () => observableUrl : observableUrl,
 				requiresForm: true,
 				buttonViewCreator( isOnlyOne ) {
 					const button = new ButtonView( editor.locale );
@@ -389,12 +432,12 @@ describe( 'ImageInsertUI', () => {
 			} );
 		}
 
-		function registerUploadIntegration() {
+		function registerUploadIntegration( observableAsFunc ) {
 			observableUpload = new Model( { isEnabled: true } );
 
 			insertImageUI.registerIntegration( {
 				name: 'upload',
-				observable: observableUpload,
+				observable: observableAsFunc ? () => observableUpload : observableUpload,
 				buttonViewCreator( isOnlyOne ) {
 					const button = new ButtonView( editor.locale );
 
