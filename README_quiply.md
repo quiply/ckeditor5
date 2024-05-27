@@ -9,12 +9,14 @@ Update git:
 2) git fetch upstream
 3) "git merge upstream/stable" (or "git rebase upstream/stable")
 4) -> use intellij to resolve conflicts: ignore conflicts in build directory (build/ckeditor.js and build/translations/*)
-5) -> ckeditor5-build-classic/package.json: 
+5) -> ckeditor5-build-classic/package.json:
    1) update versions
-   2) "@ckeditor/ckeditor5-core" must be in "dependencies" and not "devDependencies"  
+   2) "@ckeditor/ckeditor5-core" must be in "dependencies" and not "devDependencies"
 6) cd ../.. && rm yarn.lock && rm -rf node_modules && yarn install && cd packages/ckeditor5-build-classic && rm -rf node_modules && yarn install
-7) cd ../.. && git commit -a (the eslint check in Intellij does not work correctly)
-    
+7) do not commit in intellij! (the eslint check in Intellij does not work correctly)
+   1) cd ../.. && git commit -a
+   2) git push
+
 Build new ckeditor version:
 ===
 
@@ -28,7 +30,7 @@ Error
 ===
 
 remove node_modules and build again
-                       
+
 
 Customized or added
 ===
