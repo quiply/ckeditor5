@@ -7,7 +7,7 @@
 import { ClassicEditor as ClassicEditorBase } from '@ckeditor/ckeditor5-editor-classic';
 // import InlineEditorBase from '@ckeditor/ckeditor5-editor-inline/src/inlineeditor';
 
-import { AIAssistant, OpenAITextAdapter } from '@ckeditor/ckeditor5-ai';
+// import { AIAssistant, AITextAdapter, AIRequestError } from '@ckeditor/ckeditor5-ai';
 import { Alignment } from '@ckeditor/ckeditor5-alignment';
 import { AutoImage, Image, ImageCaption, ImageInsert, ImageResize, ImageStyle, ImageToolbar, ImageUpload } from '@ckeditor/ckeditor5-image';
 import { Autoformat } from '@ckeditor/ckeditor5-autoformat';
@@ -33,6 +33,7 @@ import { Table, TableCellProperties, TableProperties, TableToolbar, TableCaption
 import { TextTransformation } from '@ckeditor/ckeditor5-typing';
 
 import emojiIcon from '../theme/icons/qyEmoji.svg';
+import aiWandIcon from '../theme/icons/qyAiWand.svg';
 import { Plugin } from '@ckeditor/ckeditor5-core';
 import { ButtonView } from '@ckeditor/ckeditor5-ui';
 
@@ -49,6 +50,13 @@ class QyEmojiPlugin extends Plugin {
 				tooltip: true
 			} );
 
+			// add id for element
+			view.extendTemplate( {
+				attributes: {
+					id: 'qyEmojiButton'
+				}
+			} );
+
 			// Callback executed once the icon is clicked
 			view.on( 'execute', () => {
 				// fire a JS event
@@ -60,10 +68,84 @@ class QyEmojiPlugin extends Plugin {
 	}
 }
 
+class QyAiWandPlugin extends Plugin {
+	public init(): void {
+		const editor = this.editor;
+
+		editor.ui.componentFactory.add( 'qyAiWandPlugin', locale => {
+			const view = new ButtonView( locale );
+
+			view.set( {
+				label: 'AI',
+				icon: aiWandIcon,
+				tooltip: true
+			} );
+
+			// add id for element
+			view.extendTemplate( {
+				attributes: {
+					id: 'qyAiButton_'
+				}
+			} );
+
+			// Callback executed once the icon is clicked
+			view.on( 'execute', () => {
+				// fire a JS event
+				window.dispatchEvent( new CustomEvent( 'qy-ckeditor-aiwand-clicked', {
+					detail: {
+						ckEditorParam: editor,
+						qyClickedElement: view.element
+					}
+				} ) );
+			} );
+
+			return view;
+		} );
+	}
+}
+
+// class QyAITextAdapter extends AITextAdapter {
+//	private qyConfig: any;
+//
+//	public static get pluginName() {
+//		return 'QyAITextAdapter' as const;
+//	}
+//
+//	public setQyConfig( configParam: any ): void {
+//		this.qyConfig = configParam;
+//	}
+//
+//	public async sendRequest( requestData: any ): Promise<void> {
+//		const body = this.qyConfig.requestParameters;
+//		body.messages = [
+//			{
+//				role: 'system',
+//				content: requestData.query
+//			},
+//			{
+//				role: 'user',
+//				content: requestData.context
+//			}
+//		];
+//		const response = await fetch( this.qyConfig.apiUrl, {
+//			method: 'POST',
+//			body: JSON.stringify( body ),
+//			headers: this.qyConfig.headers
+//		} );
+//
+//		if ( !response.ok ) {
+//			throw new AIRequestError( 'The request failed for unknown reason.' );
+//		}
+//
+//		const responseText = await response.text();
+//		requestData.onData( responseText );
+//	}
+// }
+
 export default class ClassicEditor extends ClassicEditorBase {
 	public static override builtinPlugins = [
-		AIAssistant,
-		OpenAITextAdapter,
+		// AIAssistant,
+		// QyAITextAdapter,
 		Alignment,
 		AutoImage,
 		Autoformat,
@@ -116,7 +198,8 @@ export default class ClassicEditor extends ClassicEditorBase {
 		TodoList,
 		Underline,
 
-		QyEmojiPlugin
+		QyEmojiPlugin,
+		QyAiWandPlugin
 	];
 
 	public static override defaultConfig = {
