@@ -60,7 +60,12 @@ class QyEmojiPlugin extends Plugin {
 			// Callback executed once the icon is clicked
 			view.on( 'execute', () => {
 				// fire a JS event
-				window.dispatchEvent( new CustomEvent( 'qy-ckeditor-emoji-clicked', { detail: { ckEditorParam: editor } } ) );
+				window.dispatchEvent( new CustomEvent( 'qy-ckeditor-emoji-clicked', {
+					detail: {
+						ckEditorParam: editor,
+						qyClickedElement: view.element
+					}
+				} ) );
 			} );
 
 			return view;
@@ -84,7 +89,7 @@ class QyAiWandPlugin extends Plugin {
 			// add id for element
 			view.extendTemplate( {
 				attributes: {
-					id: 'qyAiButton_'
+					id: 'qyAiButton'
 				}
 			} );
 
